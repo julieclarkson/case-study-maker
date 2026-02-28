@@ -1,0 +1,25 @@
+{
+  "name": "starter",
+  "family": "portfolio",
+  "version": "1.0.0",
+  "description": "Technical Case Study — portfolio template for recruiters evaluating engineering judgment. Hero architecture diagram, tradeoffs flowchart, risks/security cards, iteration timeline, commit history, screenshot gallery.",
+  "author": "Case Study Maker",
+  "license": "MIT",
+  "placeholders": [
+    "PROJECT_NAME",
+    "SUMMARY",
+    "DATE_RANGE",
+    "ROLE",
+    "REPO_URL",
+    "REPO_LABEL",
+    "BADGE",
+    "ARCHITECTURE_HERO",
+    "ROLE_HTML",
+    "CONSTRAINTS_HTML",
+    "TRADEOFFS_HTML",
+    "RISKS_HTML",
+    "SECURITY_HTML",
+    "ARCHITECTURE_HTML",
+    "ITERATION_LEAD"
+  ]
+}

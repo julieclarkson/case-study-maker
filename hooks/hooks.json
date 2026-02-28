@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionEnd": [
+      {
+        "command": "node ./hooks/scripts/session-capture.js"
+      }
+    ],
+    "afterShellExecution": [
+      {
+        "command": "node ./hooks/scripts/check-commit.js",
+        "matcher": "git commit|git merge"
+      }
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "name": "technical",
+  "description": "Precise, evidence-driven writing for developer audiences",
+  "instructions": "Use specific technical terms. Cite real tools, libraries, frameworks, and patterns by name. Avoid marketing superlatives like 'revolutionary' or 'game-changing'. Lead with what the product does, not how it makes you feel. Short, direct sentences. No filler words. Prefer concrete details over vague claims. If there are metrics, state them plainly. Write like a senior engineer explaining their tool to a peer."
+}

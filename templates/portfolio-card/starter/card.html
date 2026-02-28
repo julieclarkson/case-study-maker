@@ -1,0 +1,17 @@
+<!--
+  Portfolio card — paste into your page. Add to <head>: <link rel="stylesheet" href="portfolio-card_[project].css">
+  The CSS overrides your page styles. Omit the link to inherit your page's styling instead.
+-->
+<div class="csm-portfolio-card">
+  <div class="csm-portfolio-card__inner">
+    <div class="csm-portfolio-card__top">
+      <span class="csm-portfolio-card__category">
+        <span class="csm-portfolio-card__icon" aria-hidden="true">{{CATEGORY_ICON}}</span>
+        {{CATEGORY_LABEL}}
+      </span>
+      <a href="{{CTA_URL}}" class="csm-portfolio-card__cta" target="_blank" rel="noopener">{{CTA_TEXT}}{{CTA_ICON}}</a>
+    </div>
+    <h3 class="csm-portfolio-card__title">{{PROJECT_TITLE}}</h3>
+    <p class="csm-portfolio-card__description">{{PROJECT_DESCRIPTION}}</p>
+  </div>
+</div>
