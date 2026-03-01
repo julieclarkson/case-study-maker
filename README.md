@@ -20,6 +20,15 @@ Or install directly from the repository:
 
 ---
 
+## Requirements
+
+**Node.js** — Used by session-end and post-commit hooks for smart reminders (uncaptured commits, suggested reflection questions). If Node isn't installed, all other features work; you just won't get those automated prompts.
+
+- **Check:** `node --version` (if you see a version like v20.x, you're set)
+- **Install:** [nodejs.org](https://nodejs.org) or `brew install node` (macOS)
+
+---
+
 ## Quick start
 
 1. Open any project in Cursor
@@ -147,6 +156,19 @@ The plugin is free and fully functional. Premium add-ons for professional output
 - **PDF & Notion Export** — Generate PDF-ready and Notion-formatted case studies
 - **LinkedIn Portfolio Kit** — LinkedIn-optimized formatting, headline copy, post drafts
 - **Pro Bundle** — Everything above at a discount
+
+---
+
+## Reporting issues
+
+Found a bug? [Open a GitHub issue](https://github.com/julieclarkson/case-study-maker/issues).
+
+Please include:
+- Plugin version (see CHANGELOG)
+- Cursor version
+- Node version (`node --version`)
+- Steps to reproduce
+- Any error messages (or contents of `.case-study/plugin-errors.log` if the hooks failed)
 
 ---
 

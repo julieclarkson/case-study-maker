@@ -5,7 +5,7 @@
  * session's always-on rule can prompt the developer.
  */
 
-const { readFileSync, writeFileSync, existsSync } = require('fs');
+const { readFileSync, writeFileSync, appendFileSync, existsSync } = require('fs');
 const { join } = require('path');
 const { execFileSync } = require('child_process');
 
@@ -13,51 +13,70 @@ const cwd = process.cwd();
 const caseStudyDir = join(cwd, '.case-study');
 const eventsPath = join(caseStudyDir, 'events.json');
 const pendingPath = join(caseStudyDir, 'pending.json');
+const logPath = join(caseStudyDir, 'plugin-errors.log');
+
+function logError(hookName, err) {
+  if (existsSync(caseStudyDir)) {
+    try {
+      const entry = `[${new Date().toISOString()}] ${hookName}: ${err.message}\n${err.stack || ''}\n---\n`;
+      appendFileSync(logPath, entry, 'utf-8');
+    } catch (_) {}
+  }
+}
 
 if (!existsSync(caseStudyDir)) {
   process.exit(0);
 }
 
-let events = [];
 try {
-  const raw = readFileSync(eventsPath, 'utf-8');
-  events = JSON.parse(raw).events || [];
-} catch {
-  process.exit(0);
+  run();
+} catch (err) {
+  logError('session-capture', err);
+  process.exit(1);
 }
 
-const capturedPromptIds = new Set(
-  events
-    .filter((e) => e.type === 'reflection')
-    .map((e) => e.payload.promptId)
-);
+function run() {
+  let events = [];
+  try {
+    const raw = readFileSync(eventsPath, 'utf-8');
+    events = JSON.parse(raw).events || [];
+  } catch {
+    process.exit(0);
+  }
 
-const capturedCommits = new Set(
-  events
-    .filter((e) => e.type === 'git_metadata')
-    .map((e) => e.payload.commit)
-);
+  const capturedPromptIds = new Set(
+    events
+      .filter((e) => e.type === 'reflection')
+      .map((e) => e.payload.promptId)
+  );
 
-let recentCommits = [];
-try {
-  const log = execFileSync('git', ['log', '--format=%H', '-10'], { cwd, encoding: 'utf-8' });
-  recentCommits = log.trim().split('\n').map((l) => l.trim()).filter(Boolean);
-} catch {
-  // not a git repo or git not available
-}
+  const capturedCommits = new Set(
+    events
+      .filter((e) => e.type === 'git_metadata')
+      .map((e) => e.payload.commit)
+  );
 
-const uncapturedCommits = recentCommits.filter((h) => !capturedCommits.has(h));
+  let recentCommits = [];
+  try {
+    const log = execFileSync('git', ['log', '--format=%H', '-10'], { cwd, encoding: 'utf-8' });
+    recentCommits = log.trim().split('\n').map((l) => l.trim()).filter(Boolean);
+  } catch {
+    // not a git repo or git not available
+  }
 
-const allPromptIds = ['constraints', 'tradeoffs', 'risks', 'security', 'iteration'];
-const missingPrompts = allPromptIds.filter((id) => !capturedPromptIds.has(id));
+  const uncapturedCommits = recentCommits.filter((h) => !capturedCommits.has(h));
 
-const pending = {
-  timestamp: new Date().toISOString(),
-  uncapturedCommits: uncapturedCommits.slice(0, 5),
-  missingPrompts,
-  totalEvents: events.length,
-};
+  const allPromptIds = ['constraints', 'tradeoffs', 'risks', 'security', 'iteration'];
+  const missingPrompts = allPromptIds.filter((id) => !capturedPromptIds.has(id));
 
-if (uncapturedCommits.length > 0 || missingPrompts.length > 0) {
-  writeFileSync(pendingPath, JSON.stringify(pending, null, 2), 'utf-8');
+  const pending = {
+    timestamp: new Date().toISOString(),
+    uncapturedCommits: uncapturedCommits.slice(0, 5),
+    missingPrompts,
+    totalEvents: events.length,
+  };
+
+  if (uncapturedCommits.length > 0 || missingPrompts.length > 0) {
+    writeFileSync(pendingPath, JSON.stringify(pending, null, 2), 'utf-8');
+  }
 }
