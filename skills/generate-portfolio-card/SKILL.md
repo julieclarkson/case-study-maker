@@ -30,9 +30,10 @@ Create an embeddable HTML card that developers can paste into their portfolio we
 Read `card.html` from the chosen template. Required placeholders:
 - `{{CATEGORY_LABEL}}` — e.g., "Cursor Plugin", "AI Content Generator"
 - `{{CATEGORY_ICON}}` — inline SVG or emoji for category
-- `{{CTA_TEXT}}` — button label, e.g., "View case study", "Try it free", "Get it on marketplace"
-- `{{CTA_URL}}` — link target (full case study URL, marketplace, email form, etc.)
+- `{{CTA_TEXT}}` — primary button label, e.g., "Read the case study", "View case study", "Try it free"
+- `{{CTA_URL}}` — primary link target (portfolio case study URL)
 - `{{CTA_ICON}}` — optional inline SVG for button (or empty)
+- `{{CTA2_HTML}}` — optional second CTA. When marketing output exists, use: `<a href="./marketing_[project].html" class="csm-portfolio-card__cta csm-portfolio-card__cta--secondary" target="_blank" rel="noopener">View the marketing landing page</a>` (with arrow SVG). Otherwise leave empty.
 - `{{PROJECT_TITLE}}` — project name
 - `{{PROJECT_DESCRIPTION}}` — 1–2 sentence summary from reflections or events
 

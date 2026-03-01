@@ -31,9 +31,22 @@ Or install directly from the repository:
 
 ## Quick start
 
-1. Open any project in Cursor
+**Activation (choose one):**
+
+### Option A: Via the Cursor plugin (recommended)
+1. Open any project in Cursor (with the plugin enabled)
 2. Type `/case-study` in the chat to see all available commands
 3. Use `/activate-case-study-maker` to start tracking
+
+### Option B: Via csm-init (when installed from GitHub)
+If you cloned or downloaded the repo and added it as a plugin, you can also activate from the terminal:
+
+```bash
+cd /path/to/your-project
+/path/to/case-study-maker/csm-init
+```
+
+Replace `/path/to/case-study-maker` with the actual path where you cloned the repo (e.g. `~/case-study-maker` or `~/.cursor/plugins/case-study-maker`). The script copies the rule and commands into your project so the AI partner and slash commands work in chat.
 
 Once activated, a `.case-study/` directory is created in your project root. The plugin will notice significant development moments and suggest capturing reflections naturally in conversation.
 

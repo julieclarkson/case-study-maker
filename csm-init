@@ -1,0 +1,69 @@
+#!/bin/bash
+# Case Study Maker — Activates case study tracking in the current project.
+# Run from your project directory. Works with the plugin installed from GitHub.
+#
+# Usage:
+#   cd /path/to/your-project
+#   /path/to/case-study-maker/csm-init
+#
+# The script finds the plugin directory from its own location.
+
+set -e
+
+# Plugin dir = directory containing this script (works when cloned from GitHub)
+PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+PROJECT_DIR="$(pwd)"
+
+if [ "$PLUGIN_DIR" = "$PROJECT_DIR" ]; then
+  echo "Error: Run csm-init from your project directory, not from the plugin directory."
+  echo "  cd /path/to/your-project"
+  echo "  /path/to/case-study-maker/csm-init"
+  exit 1
+fi
+
+if [ ! -f "$PLUGIN_DIR/rules/case-study-partner.mdc" ]; then
+  echo "Error: Plugin files not found at $PLUGIN_DIR"
+  echo "  Make sure you're running the csm-init from the Case Study Maker plugin directory."
+  exit 1
+fi
+
+echo "Activating Case Study Maker in: $PROJECT_DIR"
+echo ""
+
+# Create .case-study directory structure
+mkdir -p .case-study/media .case-study/templates
+if [ ! -f .case-study/events.json ]; then
+  echo '{ "version": 1, "events": [] }' > .case-study/events.json
+fi
+
+# Install the always-on rule
+mkdir -p .cursor/rules
+cp "$PLUGIN_DIR/rules/case-study-partner.mdc" .cursor/rules/case-study-partner.mdc
+
+# Copy commands so /case-study and slash commands work in chat
+mkdir -p .cursor/commands
+for cmd in "$PLUGIN_DIR/commands/"*.md; do
+  [ -f "$cmd" ] && cp "$cmd" .cursor/commands/ 2>/dev/null || true
+done
+# Overlay local-dev commands if present (dev repo only)
+[ -d "$PLUGIN_DIR/.cursor/commands" ] && for cmd in "$PLUGIN_DIR/.cursor/commands/"*.md; do
+  [ -f "$cmd" ] && cp "$cmd" .cursor/commands/ 2>/dev/null || true
+done || true
+
+# Update .gitignore
+touch .gitignore
+grep -q '.case-study/' .gitignore 2>/dev/null || echo '.case-study/' >> .gitignore
+grep -q 'case-study-partner.mdc' .gitignore 2>/dev/null || echo '.cursor/rules/case-study-partner.mdc' >> .gitignore
+
+echo "Done. Case Study Maker is active."
+echo "  .case-study/          — event log, media"
+echo "  .cursor/rules/        — always-on AI partner rule"
+echo "  .cursor/commands/     — /case-study hub and slash commands"
+echo ""
+echo "Start a new Cursor chat in this project. The AI will:"
+echo "  - Notice architecture decisions, tradeoffs, risks, security work"
+echo "  - Prompt reflections at natural moments"
+echo "  - Suggest capturing screenshots at visual milestones"
+echo ""
+echo "Recent commits:"
+git log --oneline -5 2>/dev/null || echo "  (not a git repo yet)"

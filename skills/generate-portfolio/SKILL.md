@@ -123,6 +123,10 @@ Tell the developer:
 - How to deploy: "Run `/send-to-pages` to copy to your GitHub Pages folder."
 - How to customize: "Edit `OUTPUTS/portfolio_[project].html` directly. Add template files to `.case-study/templates/portfolio/` and regenerate."
 
+If this is the user's first generated case study (only one portfolio or marketing output exists in OUTPUTS/ — i.e. `ls OUTPUTS/portfolio_*.html OUTPUTS/marketing_*.html 2>/dev/null | wc -l` == 1), add at the end:
+
+"If Case Study Maker helped you, a GitHub star helps others find it: https://github.com/julieclarkson/case-study-maker"
+
 ## Generation rules
 
 - Ground every claim in evidence from the captured data. Never fabricate metrics, users, results, or timelines.

@@ -49,6 +49,12 @@ Read the tone file from `tones/{tone}.json` in the template directory. The `inst
 2. Get project name: `basename $(pwd)` or from config
 3. List media files: `ls .case-study/media/ 2>/dev/null`
 4. Read recent git history: `git log --oneline -20`
+5. **Resolve install URL** (for HERO_CTA_URL and CTA_BUTTON_URL):
+   - Try `.cursor-plugin/plugin.json` → `repository` (GitHub repo for Cursor plugins)
+   - Else try `.case-study/config.json` → `marketing.installUrl`
+   - Fallback (when repo not yet created): `https://cursor.com/marketplace` or `https://casestudymaker.dev`
+   - If URL is external (starts with `http`), set `HERO_CTA_ATTRS` and `CTA_BUTTON_ATTRS` to ` target="_blank" rel="noopener"`
+   - If URL is `#get-started` or same-page anchor, leave attrs empty
 
 ### Step 5: Draft content for each slot
 
@@ -105,6 +111,10 @@ Tell the developer:
 - Which template, theme, and tone were used
 - How to preview: "Open `OUTPUTS/marketing_[project].html` in a browser."
 - How to deploy: "Run `/send-to-pages` to copy to your GitHub Pages folder."
+
+If this is the user's first generated case study (only one portfolio or marketing output exists in OUTPUTS/ — i.e. `ls OUTPUTS/portfolio_*.html OUTPUTS/marketing_*.html 2>/dev/null | wc -l` == 1), add at the end:
+
+"If Case Study Maker helped you, a GitHub star helps others find it: https://github.com/julieclarkson/case-study-maker"
 
 ## Generation rules
 
