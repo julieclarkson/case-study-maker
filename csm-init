@@ -14,12 +14,7 @@ set -e
 PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 PROJECT_DIR="$(pwd)"
 
-if [ "$PLUGIN_DIR" = "$PROJECT_DIR" ]; then
-  echo "Error: Run csm-init from your project directory, not from the plugin directory."
-  echo "  cd /path/to/your-project"
-  echo "  /path/to/case-study-maker/csm-init"
-  exit 1
-fi
+# Allow running from plugin dir when developing the plugin itself (project === plugin)
 
 if [ ! -f "$PLUGIN_DIR/rules/case-study-partner.mdc" ]; then
   echo "Error: Plugin files not found at $PLUGIN_DIR"
@@ -34,6 +29,33 @@ echo ""
 mkdir -p .case-study/media .case-study/templates
 if [ ! -f .case-study/events.json ]; then
   echo '{ "version": 1, "events": [] }' > .case-study/events.json
+fi
+
+# Copy builtin templates and themes so generation works in any project (path-independent)
+if [ ! -f .case-study/templates/portfolio/starter/template.html ]; then
+  mkdir -p .case-study/templates/portfolio/starter/snippets
+  cp -r "$PLUGIN_DIR/templates/portfolio/starter/"* .case-study/templates/portfolio/starter/ 2>/dev/null || true
+  echo "  Copied portfolio starter template to .case-study/templates/"
+fi
+if [ ! -f .case-study/templates/marketing/starter/template.html ]; then
+  mkdir -p .case-study/templates/marketing/starter
+  cp -r "$PLUGIN_DIR/templates/marketing/starter/"* .case-study/templates/marketing/starter/ 2>/dev/null || true
+  echo "  Copied marketing starter template to .case-study/templates/"
+fi
+if [ ! -f .case-study/templates/themes/default/variables.css ]; then
+  mkdir -p .case-study/templates/themes
+  cp -r "$PLUGIN_DIR/templates/themes/"* .case-study/templates/themes/ 2>/dev/null || true
+  echo "  Copied themes to .case-study/templates/themes/"
+fi
+if [ ! -f .case-study/scripts/build-portfolio.js ]; then
+  mkdir -p .case-study/scripts
+  cp "$PLUGIN_DIR/scripts/build-portfolio.js" .case-study/scripts/build-portfolio.js 2>/dev/null || true
+  echo "  Copied build script to .case-study/scripts/"
+fi
+if [ ! -f .case-study/templates/pitch-deck/starter/template.html ]; then
+  mkdir -p .case-study/templates/pitch-deck/starter
+  cp -r "$PLUGIN_DIR/templates/pitch-deck/"* .case-study/templates/pitch-deck/ 2>/dev/null || true
+  echo "  Copied pitch-deck template to .case-study/templates/"
 fi
 
 # Install the always-on rule
@@ -56,7 +78,7 @@ grep -q '.case-study/' .gitignore 2>/dev/null || echo '.case-study/' >> .gitigno
 grep -q 'case-study-partner.mdc' .gitignore 2>/dev/null || echo '.cursor/rules/case-study-partner.mdc' >> .gitignore
 
 echo "Done. Case Study Maker is active."
-echo "  .case-study/          — event log, media"
+echo "  .case-study/          — event log, media, templates, scripts"
 echo "  .cursor/rules/        — always-on AI partner rule"
 echo "  .cursor/commands/     — /case-study hub and slash commands"
 echo ""

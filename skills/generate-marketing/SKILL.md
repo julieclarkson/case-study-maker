@@ -16,20 +16,23 @@ Fill the active marketing template with project-specific content derived from ca
 
 ### Step 1: Resolve template, theme, and tone
 
-Read `.case-study/config.json` to find the active marketing configuration:
+**Template/theme/tone must be selected before this skill runs.** The `/generate` command always runs the selection flow (discover options, present choices, wait for reply) and updates `config.marketing` before invoking this skill. If this skill is invoked directly (e.g. user said "generate marketing"), the agent must run that selection flow first — see `commands/generate.md` Steps 2–4.
 
+Read `.case-study/config.json`:
 ```json
 {
   "marketing": {
     "template": "starter",
     "theme": "light",
-    "tone": "technical",
-    "source": "builtin"
-  }
+    "tone": "technical"
+  },
+  "marketingTemplate": "starter",
+  "marketingTheme": "light",
+  "marketingTone": "technical"
 }
 ```
 
-If no config exists, use defaults: `starter` template, `light` theme, `technical` tone.
+Check `config.marketing` first, then top-level `marketingTemplate`, `marketingTheme`, `marketingTone`. Defaults: `starter`, `light`, `technical`.
 
 **Template resolution order:**
 1. `.case-study/templates/marketing/{template}/` (local/premium — takes priority)
@@ -84,8 +87,12 @@ Let the developer edit individual slots before proceeding.
 ### Step 7: Generate output files
 
 **Output directory:** `OUTPUTS/`  
-**Naming:** `marketing_[project].html`, `marketing_[project].css`, `marketing_[project].js`  
-Project name: `basename $(pwd)` → lowercase, hyphens removed (e.g., `casestudymaker`).
+
+**When called from `/generate`:** Use `config.outputBase` from the generate flow. Format: `marketing-{template}-{theme}-{tone}-{timestamp}`. Example: `marketing-starter-light-technical-20260302-143022.html`.
+
+**Security:** Validate outputBase before writing: must contain only `[a-zA-Z0-9_-]`. Reject if empty or if it would cause path traversal (`..`, `/`, `\`).
+
+**Legacy / direct call:** Use `marketing_[project].html`, `marketing_[project].css`, `marketing_[project].js` — project = `basename $(pwd)` → lowercase, hyphens removed (e.g., `casestudymaker`).
 
 1. Create OUTPUTS:
    ```bash
@@ -93,11 +100,11 @@ Project name: `basename $(pwd)` → lowercase, hyphens removed (e.g., `casestudy
    ```
 
 2. Copy template files with output naming:
-   - `template.html` → `OUTPUTS/marketing_[project].html`
-   - `app.js` → `OUTPUTS/marketing_[project].js`
-   - **CSS:** Resolve `@import` in `themes/{theme}/styles.css`. Concatenate `templates/themes/default/variables.css` + template styles (strip `@import` lines). Write combined result to `OUTPUTS/marketing_[project].css`. Output must be self-contained.
+   - `template.html` → `OUTPUTS/{outputBase}.html`
+   - `app.js` → `OUTPUTS/{outputBase}.js`
+   - **CSS:** Resolve `@import` in `themes/{theme}/styles.css`. Concatenate `templates/themes/default/variables.css` + template styles (strip `@import` lines). Write combined result to `OUTPUTS/{outputBase}.css`. Output must be self-contained.
 
-3. In the HTML, replace every `{{SLOT_ID}}` with approved content. Update link href to `marketing_[project].css` and script src to `marketing_[project].js`.
+3. In the HTML, replace every `{{SLOT_ID}}` with approved content. Update link href to `{outputBase}.css` and script src to `{outputBase}.js`.
 
 4. Copy media:
    ```bash
@@ -107,9 +114,11 @@ Project name: `basename $(pwd)` → lowercase, hyphens removed (e.g., `casestudy
 ### Step 8: Report
 
 Tell the developer:
-- Files written: `OUTPUTS/marketing_[project].html`, `.css`, `.js`, `OUTPUTS/assets/`
+- Files written: `OUTPUTS/{outputBase}.html`, `.css`, `.js`, `OUTPUTS/assets/`
+- Local path: `OUTPUTS/{outputBase}.html`
+- **Ask:** "Want me to open this in your browser for a preview?" If yes, run `open OUTPUTS/{outputBase}.html` (macOS) or `xdg-open` (Linux) or `start` (Windows).
 - Which template, theme, and tone were used
-- How to preview: "Open `OUTPUTS/marketing_[project].html` in a browser."
+- How to preview: "Open `OUTPUTS/{outputBase}.html` in a browser."
 - How to deploy: "Run `/send-to-pages` to copy to your GitHub Pages folder."
 
 If this is the user's first generated case study (only one portfolio or marketing output exists in OUTPUTS/ — i.e. `ls OUTPUTS/portfolio_*.html OUTPUTS/marketing_*.html 2>/dev/null | wc -l` == 1), add at the end:

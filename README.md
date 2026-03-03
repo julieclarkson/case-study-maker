@@ -76,10 +76,12 @@ Use `/auto-capture` to let the AI draft reflection answers from your conversatio
 
 ### Generates case studies
 
-Two output formats, both as self-contained HTML/CSS/JS folders:
+Output formats, all as self-contained HTML/CSS/JS:
 
-- **Portfolio** (`/generate-portfolio`) -- For recruiters and hiring managers evaluating engineering judgment
-- **Marketing** (`/generate-marketing`) -- For marketers, founders, and customers evaluating product value
+- **Portfolio** (`/generate-portfolio`) — For recruiters and hiring managers evaluating engineering judgment
+- **Marketing** (`/generate-marketing`) — For marketers, founders, and customers evaluating product value
+- **Portfolio card** (`/generate-portfolio-card`) — Embeddable card for your site
+- **Custom categories** (`/generate-custom`) — Any category you install: pitch-deck, linkedin, etc. Add templates to `.case-study/templates/{category}/` and generate with `/generate {category}`.
 
 ---
 
@@ -93,9 +95,11 @@ Type `/case-study` in the Cursor chat to see the full menu. Available commands:
 | `/capture-reflection` | Manually capture a reflection at any time |
 | `/auto-capture` | AI drafts reflections from your conversation |
 | `/review-timeline` | Check case study completeness and find gaps |
+| `/generate` | Generate portfolio, marketing, card, or custom category |
 | `/generate-portfolio` | Generate a portfolio case study |
 | `/generate-marketing` | Generate a marketing case study |
-| `/generate-portfolio-card` | Generate embeddable card for your portfolio (links to case study, marketplace, etc.) |
+| `/generate-portfolio-card` | Generate embeddable card for your portfolio |
+| `/generate-custom` | Generate any installed category (pitch-deck, linkedin, etc.) |
 | `/send-to-pages` | Copy OUTPUTS to your GitHub Pages folder |
 | `/edit-case-study` | Edit wording, flow, sections, or theme |
 | `/install-template` | Install premium/custom template packs and switch themes |
@@ -116,6 +120,8 @@ your-project/
 │   └── pending.json       # Uncaptured reflection flags (auto-generated)
 └── OUTPUTS/               # Generated case studies (commit to deploy)
     ├── portfolio_[project].html
+    ├── portfolio_[project].css       # Layout (uses theme tokens)
+    ├── themes/default/variables.css  # Design tokens — swap for different themes
     ├── marketing_[project].html
     ├── portfolio-card_[project].html
     ├── portfolio-card_[project].css   # Import to override your page styles

@@ -163,10 +163,38 @@ nav a:hover {
   color: var(--color-purple-600);
 }
 
-/* ── Hero diagram ── */
+/* ── Hero diagram (workflow animations) ── */
 
 .hero-diagram {
   margin-top: 28px;
+}
+
+.arch-diagram-hero > * {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: archFadeIn 420ms ease forwards;
+}
+
+.arch-diagram-hero > *:nth-child(1) { animation-delay: 0ms; }
+.arch-diagram-hero > *:nth-child(2) { animation-delay: 80ms; }
+.arch-diagram-hero > *:nth-child(3) { animation-delay: 180ms; }
+.arch-diagram-hero > *:nth-child(4) { animation-delay: 280ms; }
+.arch-diagram-hero > *:nth-child(5) { animation-delay: 380ms; }
+
+.arch-diagram-hero > .arch-arrow {
+  animation: archFadeIn 420ms ease forwards, archFlowPulse 2.5s ease-in-out infinite;
+}
+
+.arch-diagram-hero > .arch-arrow:nth-child(2) { animation-delay: 80ms, 900ms; }
+.arch-diagram-hero > .arch-arrow:nth-child(4) { animation-delay: 280ms, 900ms; }
+
+@keyframes archFadeIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes archFlowPulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
 }
 
 .arch-diagram-hero {
@@ -349,6 +377,11 @@ section code {
   margin-bottom: 0;
 }
 
+.tradeoff-alt {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -484,6 +517,23 @@ section code {
 
 .filter-bar input:focus {
   border-color: var(--accent);
+}
+
+/* ── Evidence canvas animation ── */
+
+.evidence-canvas-wrap {
+  margin: 24px 0 32px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, #faf5ff, #f0f9ff);
+}
+
+.evidence-canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
 }
 
 /* ── Gallery ── */

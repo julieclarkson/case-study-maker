@@ -1,0 +1,22 @@
+{
+  "name": "starter",
+  "family": "pitch-deck",
+  "version": "1.0.0",
+  "description": "Minimal pitch deck / one-pager template for sharing project overview.",
+  "author": "Case Study Maker",
+  "license": "MIT",
+  "placeholders": [
+    "TITLE",
+    "PROJECT_SLUG",
+    "HEADLINE",
+    "SUBTITLE",
+    "PROBLEM_HEADING",
+    "PROBLEM_BODY",
+    "SOLUTION_HEADING",
+    "SOLUTION_BODY",
+    "CTA_TEXT",
+    "CTA_URL",
+    "CTA_ATTRS",
+    "CTA_LABEL"
+  ]
+}

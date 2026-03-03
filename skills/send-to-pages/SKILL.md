@@ -20,13 +20,13 @@ Copy selected generated OUTPUTS to a folder used for GitHub Pages (or similar st
 ls OUTPUTS/*.html 2>/dev/null
 ```
 
-Infer output types from filenames: `portfolio_*.html` → portfolio, `marketing_*.html` → marketing, `portfolio-card_*.html` → portfolio-card. If empty, tell the developer: "Run `/generate-portfolio`, `/generate-marketing`, or `/generate-portfolio-card` first."
+**Discover output types from filenames:** Any `{type}_*.html` pattern in OUTPUTS is a valid type. Examples: `portfolio_*.html` → portfolio, `marketing_*.html` → marketing, `portfolio-card_*.html` → portfolio-card, `pitch-deck_*.html` → pitch-deck. Parse the prefix before the first underscore. If empty, tell the developer to run a generate command first.
 
 ### Step 2: Ask which outputs to send
 
-**Ask the developer:** "Which outputs do you want to send? (e.g. `portfolio`, `marketing`, `portfolio-card`, or `all`)"
+**Ask the developer:** "Which outputs do you want to send? (e.g. `portfolio`, `marketing`, `portfolio-card`, `pitch-deck`, or `all`)"
 
-Parse the response. If they say "all", select every output type that exists in OUTPUTS. Otherwise, select only the types they name.
+List the discovered types from Step 1. Parse the response. If they say "all", select every output type that exists in OUTPUTS. Otherwise, select only the types they name.
 
 ### Step 3: Resolve target path
 
@@ -54,11 +54,12 @@ If no config, ask: "Where should I copy the files? For example: `docs` (same rep
 
 **Output → files mapping** (project name = `basename $(pwd)` normalized: lowercase, hyphens removed):
 
-| Output        | Files to copy |
-|---------------|---------------|
-| portfolio     | `portfolio_[project].html`, `portfolio_[project].css`, `OUTPUTS/assets/*` |
-| marketing     | `marketing_[project].html`, `marketing_[project].css`, `marketing_[project].js` |
-| portfolio-card| `portfolio-card_[project].html`, `portfolio-card_[project].css` |
+For each output type `{type}` discovered from filenames:
+- Copy `{type}_[project].html`
+- Copy `{type}_[project].css` if it exists
+- Copy `{type}_[project].js` if it exists
+- For `portfolio`: also copy `OUTPUTS/assets/*` to `[target]/assets/`
+- For any type with a `themes/` subdir in OUTPUTS: copy `OUTPUTS/themes/` to preserve theme swapping
 
 **Rules:**
 - Copy only files for the selected output types.

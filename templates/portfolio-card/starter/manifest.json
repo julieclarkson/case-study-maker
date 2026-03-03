@@ -1,4 +1,5 @@
 {
+  "styleMode": ["stylesheet", "inherit"],
   "name": "starter",
   "family": "portfolio-card",
   "version": "1.0.0",

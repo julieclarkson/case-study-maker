@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:;">
   <title>{{PROJECT_NAME}} — Portfolio Case Study</title>
-  <link rel="stylesheet" href="template.css">
+  <link rel="stylesheet" href="themes/{{THEME}}/variables.css">
+  <link rel="stylesheet" href="{{OUTPUT_BASE}}.css">
 </head>
 <body>
 
@@ -42,46 +43,46 @@
 
   <main class="container">
 
-    <section id="role">
+    <section id="role" class="reveal">
       <div class="section-label">Role &amp; Scope</div>
       <h2>Role &amp; Scope</h2>
       {{ROLE_HTML}}
     </section>
 
-    <section id="constraints" class="section-alt">
+    <section id="constraints" class="section-alt reveal">
       <div class="section-label">Constraints</div>
       <h2>Constraints</h2>
-      {{CONSTRAINTS_HTML}}
+      <div class="grid-2">{{CONSTRAINTS_SECTION}}</div>
     </section>
 
-    <section id="tradeoffs">
+    <section id="tradeoffs" class="reveal">
       <div class="section-label">Tradeoffs</div>
       <h2>Tradeoffs</h2>
-      {{TRADEOFFS_HTML}}
+      {{TRADEOFFS_SECTION}}
     </section>
 
-    <section id="risks" class="section-alt">
+    <section id="risks" class="section-alt reveal">
       <div class="section-label">Risks &amp; Mitigations</div>
       <h2>Risks &amp; Mitigations</h2>
       <p class="section-lead">Each risk was identified during development and patched before shipping.</p>
-      {{RISKS_HTML}}
+      {{RISKS_SECTION}}
     </section>
 
-    <section id="security">
+    <section id="security" class="reveal">
       <div class="section-label">Security Design</div>
       <h2>Security Design</h2>
       <p class="section-lead">Security was a primary design constraint, not an afterthought.</p>
-      {{SECURITY_HTML}}
+      <div class="grid-2">{{SECURITY_SECTION}}</div>
     </section>
 
-    <section id="architecture" class="section-alt">
+    <section id="architecture" class="section-alt reveal">
       <div class="section-label">Technical Highlights</div>
       <h2>Architecture</h2>
       <p class="section-lead">The system maps directly to its component model. Each concern has a dedicated layer.</p>
       {{ARCHITECTURE_HTML}}
     </section>
 
-    <section id="iteration">
+    <section id="iteration" class="reveal">
       <div class="section-label">Iteration</div>
       <h2>Iteration Timeline</h2>
       <p class="section-lead">{{ITERATION_LEAD}}</p>
@@ -89,7 +90,7 @@
       <p class="timeline-hint">Click an event to expand details.</p>
     </section>
 
-    <section id="commits" class="section-alt">
+    <section id="commits" class="section-alt reveal">
       <div class="section-label">Commit History</div>
       <h2>Commit History</h2>
       <div class="filter-bar">
@@ -98,10 +99,13 @@
       <ul class="commit-list" id="commit-list"></ul>
     </section>
 
-    <section id="evidence">
+    <section id="evidence" class="reveal">
       <div class="section-label">Visual Evidence</div>
       <h2>Visual Evidence</h2>
-      <p class="section-lead">Screenshots captured during development.</p>
+      <p class="section-lead">Output evolution, key UI moments, and diagrams from the build.</p>
+      <div class="evidence-canvas-wrap">
+        <canvas id="evidence-canvas" width="772" height="280" aria-label="Case Study Maker workflow: Developer to outputs"></canvas>
+      </div>
       <div class="gallery" id="gallery"></div>
     </section>
 

@@ -1,15 +1,23 @@
-# Themes
+# Shared Themes (legacy)
 
-Themes provide **design tokens** (colors, typography, spacing). Templates provide **layout, animation, and function**. You can swap themes without changing templates.
+**Preferred:** Themes now live inside each template: `[category]/[template]/themes/[theme]/`. See `templates/README.md` for the full architecture.
+
+This `themes/` folder is kept for backward compatibility. Portfolio and portfolio-card resolve themes here if the template has no `themes/` subdir.
 
 ## Structure
 
 ```
 themes/
   default/
-    variables.css   # :root { --accent, --font, --radius, ... }
+    variables.css   # colors, fonts, design tokens
     manifest.json   # name, description
 ```
+
+## Theme = design system
+
+A theme holds the full visual design system:
+- **variables.css** — Colors, fonts, spacing, radii
+- **framework.css** (optional) — Component styling (Material, Cupertino, Fluent). Swap theme = swap the entire MUI.
 
 ## Adding a theme
 

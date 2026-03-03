@@ -23,9 +23,13 @@ Create an embeddable HTML card that developers can paste into their portfolio we
 
 ### Step 2: Resolve template
 
+**Template/theme/style must be selected before this skill runs.** The `/generate` or `/generate-portfolio-card` command always runs the selection flow (discover options, present choices, wait for reply) and updates config before invoking this skill. If invoked directly, the agent must run that flow first — see `commands/generate-portfolio-card.md` or `commands/generate.md` Steps 2–5.
+
+**Use config:** `config.portfolioCardTemplate`, `config.portfolioCardTheme`, `config.portfolioCardStyleMode`.
+
 **Template resolution order:**
-1. `.case-study/templates/portfolio-card/` (user-installed)
-2. `templates/portfolio-card/starter/` (built-in)
+1. `.case-study/templates/portfolio-card/{template}/`
+2. `templates/portfolio-card/{template}/`
 
 Read `card.html` from the chosen template. Required placeholders:
 - `{{CATEGORY_LABEL}}` — e.g., "Cursor Plugin", "AI Content Generator"
@@ -33,7 +37,7 @@ Read `card.html` from the chosen template. Required placeholders:
 - `{{CTA_TEXT}}` — primary button label, e.g., "Read the case study", "View case study", "Try it free"
 - `{{CTA_URL}}` — primary link target (portfolio case study URL)
 - `{{CTA_ICON}}` — optional inline SVG for button (or empty)
-- `{{CTA2_HTML}}` — optional second CTA. When marketing output exists, use: `<a href="./marketing_[project].html" class="csm-portfolio-card__cta csm-portfolio-card__cta--secondary" target="_blank" rel="noopener">View the marketing landing page</a>` (with arrow SVG). Otherwise leave empty.
+- `{{CTA2_HTML}}` — optional second CTA. When marketing output exists, use: `<a href="./{marketingOutputBase}.html" class="csm-portfolio-card__cta csm-portfolio-card__cta--secondary" target="_blank" rel="noopener">View the marketing landing page</a>` (with arrow SVG). Find the latest marketing file in OUTPUTS/ (e.g. `marketing-starter-light-technical-20260302-143022.html` or `marketing_casestudymaker.html`). Otherwise leave empty.
 - `{{PROJECT_TITLE}}` — project name
 - `{{PROJECT_DESCRIPTION}}` — 1–2 sentence summary from reflections or events
 
@@ -66,26 +70,37 @@ Or a simpler code icon. For "Cursor Plugin" / dev projects, a terminal or bracke
 
 ### Step 5: Output
 
+**Style mode** (config.portfolioCardStyleMode from `/generate`): `stylesheet` (default) or `inherit`.
+- **stylesheet** — Output HTML + CSS. Self-contained.
+- **inherit** — Output HTML only. No CSS. Card inherits font, color, layout from parent page.
+
 **Output directory:** `OUTPUTS/`  
-**Naming:** `portfolio-card_[project].html`, `portfolio-card_[project].css`  
-Project name: `basename $(pwd)` → lowercase, hyphens removed (e.g., `casestudymaker`).
 
-1. **Write HTML:** `OUTPUTS/portfolio-card_[project].html`
+**When called from `/generate`:** Use `config.outputBase` from the generate flow. Format: `portfolio-card-{template}-{theme}-{timestamp}`. Example: `portfolio-card-starter-default-20260302-143022.html`.
+
+**Security:** Validate outputBase before writing: must contain only `[a-zA-Z0-9_-]`. Reject if empty or if it would cause path traversal (`..`, `/`, `\`).
+
+**Legacy / direct call:** Use `portfolio-card_[project].html`, `portfolio-card_[project].css` (stylesheet only). Project = `basename $(pwd)` → lowercase, hyphens removed.
+
+1. **Write HTML:** `OUTPUTS/{outputBase}.html`
    - Card structure with placeholders filled
-   - Include: `<!-- Add to <head>: <link rel="stylesheet" href="portfolio-card_[project].css"> to apply template styles -->`
-   - CTA URL: link to `portfolio_[project].html` if it exists, or user-specified URL
+   - If stylesheet: include `<!-- Add to <head>: <link rel="stylesheet" href="{outputBase}.css"> -->`
+   - If inherit: no stylesheet. Card uses semantic markup; parent provides all styling.
+   - CTA URL: link to latest portfolio output (e.g. `portfolio-starter-default-20260302-143022.html` or `portfolio_casestudymaker.html`) if it exists, or user-specified URL
 
-2. **Write CSS:** `OUTPUTS/portfolio-card_[project].css`
-   - Resolve `@import` in `templates/portfolio-card/starter/card-override.css`. Concatenate `templates/themes/default/variables.css` + card styles (strip `@import` lines). Write combined result. Output must be self-contained.
-   - Template CSS overrides your page when imported — add `<link rel="stylesheet" href="portfolio-card_[project].css">` to your site's `<head>`
+2. **Write CSS** (stylesheet mode only): `OUTPUTS/{outputBase}.css`
+   - Resolve theme from `templates/portfolio-card/starter/themes/{theme}/` or `templates/themes/{theme}/`
+   - Concatenate theme variables + card-override.css. Output self-contained.
 
 3. **Escape all user content** before inserting into HTML (`&`, `<`, `>`, `"`, `'`).
 
 ### Step 6: Report
 
 Tell the developer:
-- Files written: `OUTPUTS/portfolio-card_[project].html`, `OUTPUTS/portfolio-card_[project].css`
-- How to use: "Paste the HTML into your portfolio page. Add `<link rel=\"stylesheet\" href=\"portfolio-card_[project].css\">` to your page's `<head>` to apply template styles (overrides your page)."
+- Files written: `OUTPUTS/{outputBase}.html`, `OUTPUTS/{outputBase}.css`
+- Local path: `OUTPUTS/{outputBase}.html`
+- **Ask:** "Want me to open this in your browser for a preview?" If yes, run `open OUTPUTS/{outputBase}.html` (macOS) or `xdg-open` (Linux) or `start` (Windows).
+- How to use: "Paste the HTML into your portfolio page. Add `<link rel=\"stylesheet\" href=\"{outputBase}.css\">` to your page's `<head>` to apply template styles (overrides your page)."
 - How to deploy: "Run `/send-to-pages` to copy to your GitHub Pages folder."
 
 ## Template format (for selling)
