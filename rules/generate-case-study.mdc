@@ -1,0 +1,25 @@
+---
+description: Reserves "generate" for Case Study Maker. When user says "generate", run Case Study Maker workflow (portfolio/marketing from events.json) — not other tools.
+alwaysApply: false
+---
+
+# Generate = Case Study Maker
+
+When the user says **"generate"** in this project, run the **Case Study Maker** workflow. Do NOT run other generation tools (e.g. Git Launcher, README generators, etc.).
+
+## Trigger
+
+Only the word **"generate"** (or "/generate") invokes Case Study Maker's generation flow.
+
+## Workflow
+
+Follow the `/generate` command: read `.cursor/commands/generate.md` and execute it. In brief:
+
+1. Check for existing OUTPUTS
+2. Present category/template/theme/tone choices (discovered from `.case-study/templates/`)
+3. Run `node .case-study/scripts/build-portfolio.js` (or equivalent for marketing/pitch-deck)
+4. Output to `OUTPUTS/` or `.case-study/OUTPUTS/`
+
+## When .case-study/ is missing
+
+If `.case-study/` does not exist: tell the user to run `/activate-case-study-maker` or `csm-init` first.
