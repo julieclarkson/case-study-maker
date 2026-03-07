@@ -61,6 +61,22 @@ Read the tone file from `tones/{tone}.json` in the template directory. The `inst
 
 ### Step 5: Draft content for each slot
 
+**DEMO_WORKFLOW_JSON (required):** Build the demo from the **customer's perspective** — what workflow explains the product to a potential customer?
+
+**Best format (input → process → output container → customer-relevant files):**
+```json
+{"input":"Your Codebase","process":"Git Launcher","output":"Launch Kit","outputFiles":[{"label":"README"},{"label":"Screenshots"},{"label":"Architecture"},{"label":"Social Preview"},{"label":"Launch Posts"}]}
+```
+
+- **input** — What the product reads (e.g. "Your Codebase", "Your Timeline")
+- **process** — Product name
+- **output** — The main deliverable the customer gets (e.g. "Launch Kit", "Portfolio", "Report")
+- **outputFiles** — Only **customer-relevant** contents. Use friendly names (Screenshots, Launch Posts). **Omit** internal/repo artifacts (.github/, LICENSE, CONTRIBUTING). Derive from README "What Gets Generated", FEATURE titles, or docs — but filter to what the customer cares about.
+
+**Fallback (no container):** `{"input","process","outputs"}` — use when there's no single main deliverable.
+
+**Legacy:** Array of `{label, color?}` for linear steps.
+
 For every slot in the manifest, draft content that:
 - Is grounded in real data from `events.json` (reflections, screenshots, commits)
 - Follows the tone preset instructions exactly

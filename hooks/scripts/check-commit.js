@@ -1,8 +1,8 @@
 /**
- * After-commit hook: Flags the latest commit for case study reflection.
- * Runs after `git commit` or `git merge` shell commands.
- * Analyzes the commit diff to suggest which reflection questions are relevant,
- * then writes to .case-study/pending.json for the always-on rule to pick up.
+ * After-commit hook: Captures commit metadata to events.json and flags suggested reflections.
+ * Runs after `git commit` or `git merge` (Cursor plugin hook or git post-commit).
+ * 1. Appends git_metadata event to events.json (seamless background capture)
+ * 2. Writes suggested reflection questions to pending.json for the Case Study Partner
  */
 
 const { readFileSync, writeFileSync, appendFileSync, existsSync } = require('fs');
@@ -11,8 +11,13 @@ const { execFileSync } = require('child_process');
 
 const cwd = process.cwd();
 const caseStudyDir = join(cwd, '.case-study');
+const eventsPath = join(caseStudyDir, 'events.json');
 const pendingPath = join(caseStudyDir, 'pending.json');
 const logPath = join(caseStudyDir, 'plugin-errors.log');
+
+function randomId() {
+  return Math.random().toString(16).slice(2, 10);
+}
 
 function logError(hookName, err) {
   if (existsSync(caseStudyDir)) {
@@ -67,7 +72,7 @@ function run() {
   const changedFiles = diffStat
     .split('\n')
     .map((l) => l.trim().split('|')[0]?.trim())
-    .filter(Boolean);
+    .filter((f) => f && !/^\d+ files? changed/.test(f));
 
   const suggestedQuestions = [];
 
@@ -91,6 +96,32 @@ function run() {
     suggestedQuestions.push('tradeoffs');
   }
 
+  // 1. Always append git_metadata to events.json (seamless background capture)
+  let eventsData = { version: 1, events: [] };
+  try {
+    eventsData = JSON.parse(readFileSync(eventsPath, 'utf-8'));
+    if (!Array.isArray(eventsData.events)) eventsData.events = [];
+  } catch {
+    // fresh events file
+  }
+
+  const shortHash = commitHash.slice(0, 7);
+  const gitMetadataEvent = {
+    id: randomId(),
+    timestamp: new Date().toISOString(),
+    type: 'git_metadata',
+    payload: {
+      commit: commitHash,
+      shortHash,
+      message: commitMessage,
+      changedFiles,
+      suggestedQuestions,
+    },
+  };
+  eventsData.events.push(gitMetadataEvent);
+  writeFileSync(eventsPath, JSON.stringify(eventsData, null, 2), 'utf-8');
+
+  // 2. Write pending.json for Case Study Partner (when reflection questions suggested)
   if (suggestedQuestions.length === 0) {
     process.exit(0);
   }

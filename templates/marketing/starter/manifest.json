@@ -25,6 +25,7 @@
     { "id": "HOW_CARD_3_TITLE", "label": "Step 3 title", "hint": "Short verb phrase" },
     { "id": "HOW_CARD_3_DESC", "label": "Step 3 description", "hint": "2-3 sentences with specific details" },
     { "id": "DEMO_HEADLINE", "label": "Demo section headline", "hint": "Describe what the demo shows" },
+    { "id": "DEMO_WORKFLOW_JSON", "label": "Workflow diagram data", "hint": "BEST: Customer-centric flow. {\"input\":\"Your Codebase\",\"process\":\"Git Launcher\",\"output\":\"Launch Kit\",\"outputFiles\":[\"README\",\"Screenshots\",\"Architecture\",\"Social Preview\",\"Launch Posts\"]}. Think: what does the customer see? Input → Product → Main deliverable → customer-relevant contents. Omit internal artifacts (.github, LICENSE). Use friendly names (Screenshots not images/). FALLBACK: {\"input\",\"process\",\"outputs\"} when no container. Leave empty for default." },
     { "id": "FEATURES_HEADLINE", "label": "Features section headline", "hint": "Benefit-oriented, not just 'Features'" },
     { "id": "FEATURES_LEAD", "label": "Features lead text", "hint": "1-2 short sentences summarizing capabilities" },
     { "id": "FEATURE_1_ICON", "label": "Feature 1 icon", "hint": "Single HTML entity, e.g. &#9889;" },

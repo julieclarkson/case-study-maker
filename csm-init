@@ -52,6 +52,10 @@ if [ ! -f .case-study/scripts/build-portfolio.js ]; then
   cp "$PLUGIN_DIR/scripts/build-portfolio.js" .case-study/scripts/build-portfolio.js 2>/dev/null || true
   echo "  Copied build script to .case-study/scripts/"
 fi
+# Copy hooks for seamless background capture (git post-commit)
+mkdir -p .case-study/hooks
+cp "$PLUGIN_DIR/hooks/scripts/check-commit.js" .case-study/hooks/check-commit.js 2>/dev/null || true
+echo "  Copied hooks for background capture"
 if [ ! -f .case-study/templates/pitch-deck/starter/template.html ]; then
   mkdir -p .case-study/templates/pitch-deck/starter
   cp -r "$PLUGIN_DIR/templates/pitch-deck/"* .case-study/templates/pitch-deck/ 2>/dev/null || true
@@ -78,6 +82,21 @@ touch .gitignore
 grep -q '.case-study/' .gitignore 2>/dev/null || echo '.case-study/' >> .gitignore
 grep -q 'case-study-partner.mdc' .gitignore 2>/dev/null || echo '.cursor/rules/case-study-partner.mdc' >> .gitignore
 grep -q 'generate-case-study.mdc' .gitignore 2>/dev/null || echo '.cursor/rules/generate-case-study.mdc' >> .gitignore
+
+# Install git post-commit hook for seamless capture (if this is a git repo)
+if [ -d .git ] && [ -f .case-study/hooks/check-commit.js ]; then
+  HOOK_FILE=".git/hooks/post-commit"
+  if [ ! -f "$HOOK_FILE" ]; then
+    echo '#!/bin/sh' > "$HOOK_FILE"
+  fi
+  if ! grep -q 'check-commit' "$HOOK_FILE" 2>/dev/null; then
+    echo '' >> "$HOOK_FILE"
+    echo '# Case Study Maker: capture commit metadata' >> "$HOOK_FILE"
+    echo 'node .case-study/hooks/check-commit.js 2>/dev/null || true' >> "$HOOK_FILE"
+    echo "  Installed git post-commit hook for background capture"
+  fi
+  chmod +x "$HOOK_FILE" 2>/dev/null || true
+fi
 
 echo "Done. Case Study Maker is active."
 echo "  .case-study/          — event log, media, templates, scripts"
