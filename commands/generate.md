@@ -151,17 +151,19 @@ Style mode? 1) stylesheet (self-contained)  2) inherit (use parent page styling)
 
 ## Step 6: Generate with unique naming
 
-**Output filename format:**
-`{category}-{template}-{theme}-{tone?}-{timestamp}.html`
+**Output filename format (always use):**
+`{projectSlug}-{type}-{timestamp}.html`
 
-- **timestamp:** `YYYYMMDD-HHmmss` (e.g. `20260302-143022`). Use `date +%Y%m%d-%H%M%S` in bash. Ensures unique filenames so multiple outputs accrue.
-- **tone:** Only for marketing. Omit for others: `portfolio-starter-default-20260302-143022.html`
-- **marketing example:** `marketing-starter-light-technical-20260302-143022.html`
+- **projectSlug:** From `basename $(pwd)` → lowercase, hyphens removed (e.g. `gitlauncher`, `casestudymaker`)
+- **type:** `portfolio` | `marketing` | `pitch-deck` | `portfolio-card` (matches category)
+- **timestamp:** `YYYYMMDD-HHmmss` (e.g. `20260302-143022`). Use `date +%Y%m%d-%H%M%S` in bash.
+
+**Examples:** `gitlauncher-portfolio-20260307-182345.html`, `casestudymaker-marketing-20260302-143022.html`
 
 **Matching files:** Same base for `.css`, `.js`: `{base}.css`, `{base}.js`
 
 **Update `.case-study/config.json`** (or in-memory config) with:
-- `outputBase`: the full base name without extension (e.g. `portfolio-starter-default-20260302-143022`). **Security:** must contain only `a-z`, `0-9`, `-`, `_`. No path separators (`/`, `\`), dots, or `..`. Sanitize before setting.
+- `outputBase`: the full base name without extension (e.g. `gitlauncher-portfolio-20260307-182345`). **Security:** must contain only `a-z`, `0-9`, `-`, `_`. No path separators (`/`, `\`), dots, or `..`. Sanitize before setting.
 - `portfolioTemplate`, `portfolioTheme` (for portfolio)
 - `marketingTemplate`, `marketingTheme`, `marketingTone` (for marketing)
 - `portfolioCardTemplate`, `portfolioCardTheme`, `portfolioCardStyleMode` (for portfolio-card)
@@ -176,6 +178,13 @@ Style mode? 1) stylesheet (self-contained)  2) inherit (use parent page styling)
 - **Ask:** "Want me to open this in your browser for a preview?"
 - If yes: `open OUTPUTS/{outputBase}.html` (or xdg-open/start)
 
+**If category was portfolio or marketing:** Ask: "Want me to generate the index card chunk for your portfolio page?" If yes, run:
+```bash
+node .case-study/scripts/generate-index-card.cjs --base-path case-studies/
+```
+(Use `case-studies/` if deploying to GitHub Pages with outputs in a case-studies subfolder; omit `--base-path` for same-directory links.)
+The script writes `OUTPUTS/index-card.html` — paste that HTML into your index page.
+
 ## Prerequisites
 
 - `.case-study/events.json` must exist
@@ -183,11 +192,11 @@ Style mode? 1) stylesheet (self-contained)  2) inherit (use parent page styling)
 
 ## Parsing existing filenames (for update)
 
-**New format:** `{category}-{template}-{theme}-{tone?}-{timestamp}.html`
-- Regex: `^([a-z-]+)-([a-z0-9_-]+)-([a-z0-9_-]+)(?:-([a-z]+))?-(\d{8}-\d{6})\.html$`
-- Groups: category, template, theme, tone (optional), timestamp
+**Standard format:** `{projectSlug}-{type}-{timestamp}.html`
+- Regex: `^([a-z0-9_-]+)-(portfolio|marketing|pitch-deck|portfolio-card)-(\d{8}-\d{6})\.html$`
+- Groups: projectSlug, type, timestamp
 
-**Legacy format:** `{category}_{project}.html` (e.g. `portfolio_casestudymaker.html`)
+**Legacy format:** `{category}_{project}.html` (e.g. `portfolio_casestudymaker.html`) or `{category}-{template}-{theme}-{tone?}-{timestamp}.html`
 - Infer template=starter, theme=default, tone= (from config for marketing)
 
 **Security:** When deriving outputBase from a selected filename (update flow), validate the basename contains only `[a-z0-9_.-]`. Reject if the filename contains `..`, `/`, `\`, or fails validation. Use the basename only (strip path if present).

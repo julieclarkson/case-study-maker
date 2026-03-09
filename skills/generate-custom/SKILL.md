@@ -64,7 +64,7 @@ For each placeholder in the manifest:
 
 Substitute all `{{PLACEHOLDER}}` in template.html with drafted values. Write to `OUTPUTS/{outputBase}.html`.
 
-**When called from `/generate`:** Use `config.outputBase`. Format: `{category}-{template}-{theme}-{tone?}-{timestamp}`. Example: `pitch-deck-starter-default-20260302-143022.html`.
+**When called from `/generate`:** Use `config.outputBase`. Format: `{projectSlug}-{category}-{timestamp}`. Example: `gitlauncher-pitch-deck-20260307-182345.html`. Project slug = `basename $(pwd)` → lowercase, non-alphanumeric removed.
 
 **Legacy / direct call:** Use `{category}_{project}.html`. Project = `basename $(pwd)` normalized.
 

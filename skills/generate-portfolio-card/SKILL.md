@@ -76,7 +76,7 @@ Or a simpler code icon. For "Cursor Plugin" / dev projects, a terminal or bracke
 
 **Output directory:** `OUTPUTS/`  
 
-**When called from `/generate`:** Use `config.outputBase` from the generate flow. Format: `portfolio-card-{template}-{theme}-{timestamp}`. Example: `portfolio-card-starter-default-20260302-143022.html`.
+**When called from `/generate`:** Use `config.outputBase` from the generate flow. Format: `{projectSlug}-portfolio-card-{timestamp}`. Example: `gitlauncher-portfolio-card-20260307-182345.html`. Project slug = `basename $(pwd)` → lowercase, non-alphanumeric removed.
 
 **Security:** Validate outputBase before writing: must contain only `[a-zA-Z0-9_-]`. Reject if empty or if it would cause path traversal (`..`, `/`, `\`).
 

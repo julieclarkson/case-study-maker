@@ -20,7 +20,7 @@ Copy selected generated OUTPUTS to a folder used for GitHub Pages (or similar st
 ls OUTPUTS/*.html 2>/dev/null
 ```
 
-**Discover output types from filenames:** Any `{type}_*.html` pattern in OUTPUTS is a valid type. Examples: `portfolio_*.html` → portfolio, `marketing_*.html` → marketing, `portfolio-card_*.html` → portfolio-card, `pitch-deck_*.html` → pitch-deck. Parse the prefix before the first underscore. If empty, tell the developer to run a generate command first.
+**Discover output types from filenames:** Use the standard `{projectSlug}-{type}-{timestamp}.html` format. Examples: `gitlauncher-portfolio-20260307-182345.html` → portfolio, `gitlauncher-marketing-*.html` → marketing, `gitlauncher-pitch-deck-*.html` → pitch-deck. Parse the type from the second segment (after first `-`). Legacy: `{type}_*.html` (e.g. `portfolio_casestudymaker.html`). If empty, tell the developer to run a generate command first.
 
 ### Step 2: Ask which outputs to send
 
@@ -54,10 +54,10 @@ If no config, ask: "Where should I copy the files? For example: `docs` (same rep
 
 **Output → files mapping** (project name = `basename $(pwd)` normalized: lowercase, hyphens removed):
 
-For each output type `{type}` discovered from filenames:
-- Copy `{type}_[project].html`
-- Copy `{type}_[project].css` if it exists
-- Copy `{type}_[project].js` if it exists
+For each output discovered from filenames (format `{projectSlug}-{type}-{timestamp}` or legacy `{type}_[project]`):
+- Copy the `.html` file
+- Copy the matching `.css` (same base name) if it exists
+- Copy the matching `.js` (same base name) if it exists
 - For `portfolio`: also copy `OUTPUTS/assets/*` to `[target]/assets/`
 - For any type with a `themes/` subdir in OUTPUTS: copy `OUTPUTS/themes/` to preserve theme swapping
 
@@ -67,14 +67,15 @@ For each output type `{type}` discovered from filenames:
 - **Assets:** When `portfolio` is selected, copy `OUTPUTS/assets/*` to `[target]/assets/`. Portfolio references screenshots at `assets/filename.png`. Marketing and portfolio-card do not use assets by default.
 - Create `[target]/assets/` only when copying assets.
 
-**Example commands** (when portfolio + marketing selected, project=casestudymaker):
+**Example commands** (when portfolio + marketing selected, files=gitlauncher-portfolio-20260307-182345, gitlauncher-marketing-20260307-182345):
 ```bash
-mkdir -p [target]/assets
-cp OUTPUTS/portfolio_casestudymaker.html [target]/
-cp OUTPUTS/portfolio_casestudymaker.css [target]/
-cp OUTPUTS/marketing_casestudymaker.html [target]/
-cp OUTPUTS/marketing_casestudymaker.css [target]/
-cp OUTPUTS/marketing_casestudymaker.js [target]/
+mkdir -p [target]/assets [target]/themes/default
+cp OUTPUTS/gitlauncher-portfolio-20260307-182345.html [target]/
+cp OUTPUTS/gitlauncher-portfolio-20260307-182345.css [target]/
+cp OUTPUTS/gitlauncher-marketing-20260307-182345.html [target]/
+cp OUTPUTS/gitlauncher-marketing-20260307-182345.css [target]/
+cp OUTPUTS/gitlauncher-marketing-20260307-182345.js [target]/
+cp OUTPUTS/themes/default/variables.css [target]/themes/default/
 cp OUTPUTS/assets/* [target]/assets/
 ```
 

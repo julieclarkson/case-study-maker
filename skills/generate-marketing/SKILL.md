@@ -104,11 +104,11 @@ Let the developer edit individual slots before proceeding.
 
 **Output directory:** `OUTPUTS/`  
 
-**When called from `/generate`:** Use `config.outputBase` from the generate flow. Format: `marketing-{template}-{theme}-{tone}-{timestamp}`. Example: `marketing-starter-light-technical-20260302-143022.html`.
+**When called from `/generate`:** Use `config.outputBase` from the generate flow. Format: `{projectSlug}-marketing-{timestamp}`. Example: `gitlauncher-marketing-20260307-182345.html`. Project slug = `basename $(pwd)` → lowercase, non-alphanumeric removed.
 
 **Security:** Validate outputBase before writing: must contain only `[a-zA-Z0-9_-]`. Reject if empty or if it would cause path traversal (`..`, `/`, `\`).
 
-**Legacy / direct call:** Use `marketing_[project].html`, `marketing_[project].css`, `marketing_[project].js` — project = `basename $(pwd)` → lowercase, hyphens removed (e.g., `casestudymaker`).
+**Legacy / direct call:** Use `{projectSlug}-marketing-{timestamp}` (same format). Never use `marketing_[project].html` for new outputs.
 
 1. Create OUTPUTS:
    ```bash
@@ -136,6 +136,7 @@ Tell the developer:
 - Which template, theme, and tone were used
 - How to preview: "Open `OUTPUTS/{outputBase}.html` in a browser."
 - How to deploy: "Run `/send-to-pages` to copy to your GitHub Pages folder."
+- **Ask:** "Want me to generate the index card chunk for your portfolio page?" If yes, run `node .case-study/scripts/generate-index-card.cjs --base-path case-studies/` (or without `--base-path` if links should be same-directory). Writes `OUTPUTS/index-card.html` — paste into your index page.
 
 If this is the user's first generated case study (only one portfolio or marketing output exists in OUTPUTS/ — i.e. `ls OUTPUTS/portfolio_*.html OUTPUTS/marketing_*.html 2>/dev/null | wc -l` == 1), add at the end:
 

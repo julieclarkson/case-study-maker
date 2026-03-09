@@ -80,9 +80,9 @@ If none exist, instruct: "Run `csm-init` to copy templates."
 
 **Output directory:** `OUTPUTS/`
 
-**When called from `/generate`:** Use `config.outputBase` from the generate flow. Format: `{category}-{template}-{theme}-{tone?}-{timestamp}`. Example: `portfolio-starter-default-20260302-143022.html` (no tone for portfolio).
+**When called from `/generate`:** Use `config.outputBase` from the generate flow. Format: `{projectSlug}-portfolio-{timestamp}`. Example: `gitlauncher-portfolio-20260307-182345.html`. Project slug = `basename $(pwd)` → lowercase, non-alphanumeric removed.
 
-**Legacy / direct call:** Use `portfolio_{project}.html` where project = `basename $(pwd)` normalized (lowercase, hyphens removed). Example: `portfolio_casestudymaker.html`.
+**Legacy / direct call:** Use `{projectSlug}-portfolio-{timestamp}` (same format). Never use `portfolio_{project}.html` for new outputs.
 
 Create `OUTPUTS/` and `OUTPUTS/assets/` if they don't exist. Never write outside the project root.
 
@@ -103,7 +103,7 @@ Create `OUTPUTS/` and `OUTPUTS/assets/` if they don't exist. Never write outside
   "badge": "Cursor Plugin",
   "template": "starter",
   "theme": "default",
-  "outputBase": "portfolio-starter-default-20260302-143022",
+  "outputBase": "gitlauncher-portfolio-20260307-182345",
   "architectureHero": "<div class='...'>...</div>",
   "roleHtml": "<p>...</p>",
   "constraints": [{ "title": "...", "description": "..." }],
@@ -128,7 +128,7 @@ node .case-study/scripts/build-portfolio.js [project-slug]
 
 When using unique naming (`outputBase` in data), pass it explicitly:
 ```bash
-node .case-study/scripts/build-portfolio.js --output-base portfolio-starter-default-20260302-143022 --data OUTPUTS/portfolio_data_casestudymaker.json
+node .case-study/scripts/build-portfolio.js --output-base gitlauncher-portfolio-20260307-182345 --data OUTPUTS/portfolio_data.json
 ```
 
 **When updating an existing portfolio (user chose "update" in generate flow):** Always run with `--refresh-from-git` so commits and screenshots are refreshed from git + events:
@@ -224,6 +224,8 @@ Tell the developer:
 - **Suggest screenshot:** "Want me to capture a full-page screenshot of the new output for your Evidence section?" If the user says yes: browser MCP can capture the viewport (navigate to URL, resize 1280×800, screenshot), but for **true full-page** capture, instruct: "Open the HTML in Chrome, then DevTools → Cmd+Shift+P → 'Capture full size screenshot'. Save to `.case-study/media/` or `OUTPUTS/assets/`."
 - How to deploy: "Run `/send-to-pages` to copy to your GitHub Pages folder."
 - How to customize: "Edit `OUTPUTS/{outputBase}.html` directly. Add template files to `.case-study/templates/portfolio/` and regenerate."
+- **Ask:** "Want me to generate the index card chunk for your portfolio page?" If yes, run `node .case-study/scripts/generate-index-card.cjs --base-path case-studies/` (or without `--base-path` if links should be same-directory). Writes `OUTPUTS/index-card.html` — paste into your index page.
+
 If this is the user's first generated case study (only one portfolio or marketing output exists in OUTPUTS/ — i.e. `ls OUTPUTS/portfolio_*.html OUTPUTS/marketing_*.html 2>/dev/null | wc -l` == 1), add at the end:
 
 "If Case Study Maker helped you, a GitHub star helps others find it: https://github.com/julieclarkson/case-study-maker"

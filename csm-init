@@ -52,6 +52,11 @@ if [ ! -f .case-study/scripts/build-portfolio.js ]; then
   cp "$PLUGIN_DIR/scripts/build-portfolio.js" .case-study/scripts/build-portfolio.js 2>/dev/null || true
   echo "  Copied build script to .case-study/scripts/"
 fi
+if [ ! -f .case-study/scripts/generate-index-card.cjs ]; then
+  mkdir -p .case-study/scripts
+  cp "$PLUGIN_DIR/scripts/generate-index-card.cjs" .case-study/scripts/generate-index-card.cjs 2>/dev/null || true
+  echo "  Copied generate-index-card script to .case-study/scripts/"
+fi
 # Copy hooks for seamless background capture (git post-commit)
 mkdir -p .case-study/hooks
 cp "$PLUGIN_DIR/hooks/scripts/check-commit.js" .case-study/hooks/check-commit.js 2>/dev/null || true

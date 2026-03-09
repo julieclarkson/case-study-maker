@@ -70,7 +70,7 @@ function rejectInvalidOutputBase(value, source) {
   if (!validateOutputBase(value)) {
     console.error('Invalid output base.');
     console.error('Output base must contain only letters, numbers, hyphens, and underscores.');
-    console.error('Example: portfolio-starter-default-20260302-143022');
+    console.error('Example: gitlauncher-portfolio-20260307-182345');
     if (source) console.error(`(Received from ${source})`);
     process.exit(1);
   }
@@ -244,7 +244,8 @@ function main() {
     outputBase = String(data.outputBase).trim();
   }
   if (!outputBase) {
-    outputBase = `portfolio_${projectSlug}`;
+    const ts = execSync('date +%Y%m%d-%H%M%S', { encoding: 'utf-8' }).trim();
+    outputBase = `${projectSlug}-portfolio-${ts}`;
   } else {
     rejectInvalidOutputBase(outputBase, '--output-base or portfolio_data.json');
   }
