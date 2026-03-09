@@ -256,6 +256,7 @@ If this is the user's first generated case study (only one portfolio or marketin
         <a href="https://casestudymaker.dev/#bundle">Pro Bundle</a>
       </div>
       <p class="footer-free">Free Cursor plugin — <a href="https://casestudymaker.dev">casestudymaker.dev</a></p>
+      <p class="footer-ship">Ready to launch? <a href="https://github.com/julieclarkson/git-launcher">Git Launcher</a> generates README, screenshots &amp; social preview from your codebase.</p>
     </div>
   </footer>
   ```
