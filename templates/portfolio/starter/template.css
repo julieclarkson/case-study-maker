@@ -294,7 +294,7 @@ nav a:hover {
 /* ── Sections ── */
 
 section {
-  padding: 64px 0;
+  padding: 64px 24px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -329,6 +329,37 @@ section h2 {
   margin-bottom: 24px;
   font-size: 1.02rem;
   line-height: 1.65;
+}
+
+#evidence .section-lead {
+  margin-bottom: 8px;
+}
+
+#evidence {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#evidence .section-label,
+#evidence h2,
+#evidence .section-lead {
+  align-self: flex-start;
+  width: 100%;
+}
+
+#evidence .evidence-canvas-wrap {
+  margin-top: 4px;
+  margin-bottom: 24px;
+  width: 772px;
+  max-width: 100%;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+#evidence .gallery {
+  width: 100%;
+  align-self: stretch;
 }
 
 section h3 {
@@ -522,7 +553,7 @@ section code {
 /* ── Evidence canvas animation ── */
 
 .evidence-canvas-wrap {
-  margin: 24px 0 32px;
+  margin: 4px 0 24px;
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -790,6 +821,6 @@ footer {
   }
 
   section {
-    padding: 48px 0;
+    padding: 48px 16px;
   }
 }

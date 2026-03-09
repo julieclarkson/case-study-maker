@@ -274,6 +274,16 @@ function main() {
     renderSnippet(securityTpl, { CONCERN: s.concern, APPROACH: s.approach })
   ).join('\n');
 
+  const benefitsHtml = (data.benefitsHtml || '').trim();
+  const navBenefitsLink = benefitsHtml ? '<a href="#benefits">Why &amp; What</a>' : '';
+  const benefitsSection = benefitsHtml
+    ? `<section id="benefits" class="section-alt reveal">
+    <div class="section-label">Why &amp; What It Delivers</div>
+    <h2>Why &amp; What It Delivers</h2>
+    <div class="benefits-content">${benefitsHtml}</div>
+  </section>`
+    : '';
+
   let html = readFileSync(join(templateDir, 'template.html'), 'utf-8');
   const subs = {
     PROJECT_NAME: data.projectName ?? 'Project',
@@ -288,6 +298,8 @@ function main() {
     BADGE: data.badge ?? '',
     THEME: theme,
     ARCHITECTURE_HERO: data.architectureHero ?? '',
+    NAV_BENEFITS_LINK: navBenefitsLink,
+    BENEFITS_SECTION: benefitsSection,
     ROLE_HTML: data.roleHtml ?? '',
     CONSTRAINTS_SECTION: constraintsSection,
     TRADEOFFS_SECTION: tradeoffsSection,

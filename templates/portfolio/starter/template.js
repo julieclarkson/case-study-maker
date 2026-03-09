@@ -102,11 +102,10 @@
     const colW = usableW / maxCols;
     layers.forEach((nodeIndices, col) => {
       const n = nodeIndices.length;
-      const startY = padding + (n > 1 ? 0 : usableH / 2 - 15);
       const stepY = n > 1 ? usableH / (n + 1) : 0;
       nodeIndices.forEach((idx, row) => {
         result[idx].x = padding + colW * (col + 0.5);
-        result[idx].y = startY + (n > 1 ? stepY * (row + 1) : usableH / 2);
+        result[idx].y = n > 1 ? padding + stepY * (row + 1) : h / 2 - 10;
       });
     });
     return result;

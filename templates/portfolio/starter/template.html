@@ -13,6 +13,8 @@
   <nav>
     <div class="nav-inner">
       <a href="{{HOME_URL}}" class="nav-home">Home</a>
+      {{NAV_BENEFITS_LINK}}
+      <a href="#evidence">Evidence</a>
       <a href="#role">Role</a>
       <a href="#constraints">Constraints</a>
       <a href="#tradeoffs">Tradeoffs</a>
@@ -21,7 +23,6 @@
       <a href="#architecture">Architecture</a>
       <a href="#iteration">Iteration</a>
       <a href="#commits">Commits</a>
-      <a href="#evidence">Evidence</a>
     </div>
   </nav>
 
@@ -42,6 +43,18 @@
   </header>
 
   <main class="container">
+
+    {{BENEFITS_SECTION}}
+
+    <section id="evidence" class="reveal">
+      <div class="section-label">Visual Evidence</div>
+      <h2>Visual Evidence</h2>
+      <p class="section-lead">Output evolution, key UI moments, and diagrams from the build.</p>
+      <div class="evidence-canvas-wrap">
+        <canvas id="evidence-canvas" width="772" height="280" aria-label="Workflow: inputs to outputs"></canvas>
+      </div>
+      <div class="gallery" id="gallery"></div>
+    </section>
 
     <section id="role" class="reveal">
       <div class="section-label">Role &amp; Scope</div>
@@ -97,16 +110,6 @@
         <input type="text" id="commit-filter" placeholder="Filter commits…">
       </div>
       <ul class="commit-list" id="commit-list"></ul>
-    </section>
-
-    <section id="evidence" class="reveal">
-      <div class="section-label">Visual Evidence</div>
-      <h2>Visual Evidence</h2>
-      <p class="section-lead">Output evolution, key UI moments, and diagrams from the build.</p>
-      <div class="evidence-canvas-wrap">
-        <canvas id="evidence-canvas" width="772" height="280" aria-label="Case Study Maker workflow: Developer to outputs"></canvas>
-      </div>
-      <div class="gallery" id="gallery"></div>
     </section>
 
   </main>
