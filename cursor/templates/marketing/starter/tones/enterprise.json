@@ -1,0 +1,5 @@
+{
+  "name": "enterprise",
+  "description": "Professional, ROI-focused writing for stakeholders and decision-makers",
+  "instructions": "Write for managers, directors, and stakeholders evaluating tools for their teams. Lead with outcomes and business value, not technical implementation. Use phrases like 'reduces time-to-delivery', 'improves documentation coverage', 'supports engineering visibility'. Avoid slang and casual tone. Structure claims as benefit statements: 'Instead of X, teams can Y.' Reference team workflows, onboarding, knowledge transfer, and institutional memory. Professional but not stiff — clear and confident."
+}

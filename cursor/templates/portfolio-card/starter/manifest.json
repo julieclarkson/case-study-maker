@@ -1,0 +1,20 @@
+{
+  "styleMode": ["stylesheet", "inherit"],
+  "name": "starter",
+  "family": "portfolio-card",
+  "version": "1.0.0",
+  "description": "Embeddable portfolio card — category label with icon, CTA button, title, description. Inherits all styling from parent page (font, color, background, border, etc.). Wrap in your own container to control appearance.",
+  "author": "Case Study Maker",
+  "license": "MIT",
+  "placeholders": [
+    "CATEGORY_ICON",
+    "CATEGORY_LABEL",
+    "CTA_TEXT",
+    "CTA_URL",
+    "CTA_ICON",
+    "CTA2_HTML",
+    "PROJECT_TITLE",
+    "PROJECT_DESCRIPTION"
+  ],
+  "inheritance": "All visual styling (font, color, background, border, padding, margin, box-shadow) inherits from parent. Only layout structure is defined."
+}

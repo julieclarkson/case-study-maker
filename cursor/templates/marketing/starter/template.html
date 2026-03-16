@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https:; form-action 'self' https:;">
+  <title>{{PAGE_TITLE}}</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="hero">
+    <div class="hero-bg hero-bg-right"></div>
+    <div class="hero-bg hero-bg-left"></div>
+    <div class="hero-bg hero-bg-center"></div>
+    <div class="container hero-content">
+      <div class="hero-chip hero-anim hero-anim-1">{{HERO_CHIP}}</div>
+      <h1 class="hero-anim hero-anim-2">{{HERO_HEADLINE}}</h1>
+      <p class="hero-sub hero-anim hero-anim-3">{{HERO_DESCRIPTION}}</p>
+      <div class="hero-actions hero-anim hero-anim-4">
+        <a class="btn btn-primary" href="{{HERO_CTA_URL}}"{{HERO_CTA_ATTRS}}>{{HERO_CTA_TEXT}}</a>
+      </div>
+      <p class="hero-closer hero-anim hero-anim-5">{{HERO_CLOSER}}</p>
+    </div>
+    <a class="scroll-indicator" href="#how-it-works" aria-label="Scroll down">
+      <span class="scroll-mouse"><span class="scroll-dot"></span></span>
+    </a>
+  </header>
+
+  <main>
+
+    <section id="how-it-works" class="reveal">
+      <div class="container container-narrow">
+        <div class="section-label">How It Works</div>
+        <h2>{{HOW_HEADLINE}}</h2>
+        <p class="section-lead">{{HOW_LEAD}}</p>
+      </div>
+      <div class="container">
+        <div class="how-grid">
+          <div class="how-card reveal">
+            <div class="how-num">1</div>
+            <h3>{{HOW_CARD_1_TITLE}}</h3>
+            <p>{{HOW_CARD_1_DESC}}</p>
+          </div>
+          <div class="how-card reveal">
+            <div class="how-num">2</div>
+            <h3>{{HOW_CARD_2_TITLE}}</h3>
+            <p>{{HOW_CARD_2_DESC}}</p>
+          </div>
+          <div class="how-card reveal">
+            <div class="how-num">3</div>
+            <h3>{{HOW_CARD_3_TITLE}}</h3>
+            <p>{{HOW_CARD_3_DESC}}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-alt reveal">
+      <div class="container">
+        <div class="section-label">Live Workflow</div>
+        <h2>{{DEMO_HEADLINE}}</h2>
+        <div id="demo" class="demo-shell">
+          <canvas id="product-demo-canvas" width="1200" height="420" aria-label="Animated product flow diagram"></canvas>
+        </div>
+        <div class="demo-legend">
+          <span class="legend-pill"><span class="dot dot-capture"></span>Capture</span>
+          <span class="legend-pill"><span class="dot dot-structure"></span>Structure</span>
+          <span class="legend-pill"><span class="dot dot-output"></span>Publish</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <div class="container container-narrow">
+        <div class="section-label">Powerful Features</div>
+        <h2>{{FEATURES_HEADLINE}}</h2>
+        <p class="section-lead">{{FEATURES_LEAD}}</p>
+      </div>
+      <div class="container">
+        <div class="feature-grid">
+          <div class="feature-card reveal">
+            <div class="feature-icon">{{FEATURE_1_ICON}}</div>
+            <h3>{{FEATURE_1_TITLE}}</h3>
+            <p>{{FEATURE_1_DESC}}</p>
+          </div>
+          <div class="feature-card reveal">
+            <div class="feature-icon">{{FEATURE_2_ICON}}</div>
+            <h3>{{FEATURE_2_TITLE}}</h3>
+            <p>{{FEATURE_2_DESC}}</p>
+          </div>
+          <div class="feature-card reveal">
+            <div class="feature-icon">{{FEATURE_3_ICON}}</div>
+            <h3>{{FEATURE_3_TITLE}}</h3>
+            <p>{{FEATURE_3_DESC}}</p>
+          </div>
+          <div class="feature-card reveal">
+            <div class="feature-icon">{{FEATURE_4_ICON}}</div>
+            <h3>{{FEATURE_4_TITLE}}</h3>
+            <p>{{FEATURE_4_DESC}}</p>
+          </div>
+          <div class="feature-card reveal">
+            <div class="feature-icon">{{FEATURE_5_ICON}}</div>
+            <h3>{{FEATURE_5_TITLE}}</h3>
+            <p>{{FEATURE_5_DESC}}</p>
+          </div>
+          <div class="feature-card reveal">
+            <div class="feature-icon">{{FEATURE_6_ICON}}</div>
+            <h3>{{FEATURE_6_TITLE}}</h3>
+            <p>{{FEATURE_6_DESC}}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-alt reveal">
+      <div class="container split-section">
+        <div class="split-text">
+          <div class="section-label">Why This</div>
+          <h2>{{WHY_HEADLINE}}</h2>
+          <p>{{WHY_BODY_1}}</p>
+          <p>{{WHY_BODY_2}}</p>
+        </div>
+        <div class="split-points">
+          <div class="point-card">
+            <div class="point-icon point-icon-purple">{{WHY_POINT_1_ICON}}</div>
+            <div>{{WHY_POINT_1}}</div>
+          </div>
+          <div class="point-card">
+            <div class="point-icon point-icon-blue">{{WHY_POINT_2_ICON}}</div>
+            <div>{{WHY_POINT_2}}</div>
+          </div>
+          <p class="split-kicker">{{WHY_KICKER}}</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="get-started" class="cta-section reveal">
+      <div class="container container-narrow cta-inner">
+        <h2>{{CTA_HEADLINE}}</h2>
+        <p class="section-lead">{{CTA_DESCRIPTION}}</p>
+        <div class="cta-steps">
+          <div class="cta-step">
+            <div class="cta-step-num">1</div>
+            <p>{{CTA_STEP_1}}</p>
+          </div>
+          <div class="cta-step">
+            <div class="cta-step-num">2</div>
+            <p>{{CTA_STEP_2}}</p>
+          </div>
+          <div class="cta-step">
+            <div class="cta-step-num">3</div>
+            <p>{{CTA_STEP_3}}</p>
+          </div>
+        </div>
+        <a class="btn btn-primary btn-lg" href="{{CTA_BUTTON_URL}}"{{CTA_BUTTON_ATTRS}}>{{CTA_BUTTON_TEXT}}</a>
+        <p class="cta-note">{{CTA_NOTE}}</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand-col">
+        <div class="footer-brand">{{FOOTER_BRAND}}</div>
+        <p class="footer-tagline">{{FOOTER_TAGLINE}}</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#demo">Live Demo</a>
+        <a href="#get-started">Get Started</a>
+      </div>
+      <div class="footer-col">
+        <h4>Store</h4>
+        <a href="https://casestudymaker.dev/#themes">Premium Themes</a>
+        <a href="https://casestudymaker.dev/#pdf-export">PDF &amp; Notion Export</a>
+        <a href="https://casestudymaker.dev/#linkedin">LinkedIn Launch Kit</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>Free Cursor plugin &mdash; <a href="https://casestudymaker.dev">casestudymaker.dev</a></p>
+      <p class="footer-ship">Ready to launch? <a href="https://github.com/julieclarkson/git-launcher">Git Launcher</a> generates README, screenshots &amp; social preview from your codebase.</p>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox">
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
+  <script type="application/json" id="demo-workflow">{{DEMO_WORKFLOW_JSON}}</script>
+  <script src="app.js"></script>
+</body>
+</html>

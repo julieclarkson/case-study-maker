@@ -1,0 +1,29 @@
+{
+  "name": "case-study-maker-marketplace",
+  "owner": {
+    "name": "Julie Clarkson",
+    "email": "julie@superfly.dev"
+  },
+  "metadata": {
+    "description": "Case Study Maker — turn your build process into portfolio and marketing case studies",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "case-study-maker",
+      "source": "./",
+      "description": "Track your build process, capture reflection questions at the right moments, and generate portfolio and marketing case studies from your development journey.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Julie Clarkson",
+        "email": "julie@superfly.dev"
+      },
+      "homepage": "https://casestudymaker.dev",
+      "repository": "https://github.com/julieclarkson/case-study-maker",
+      "license": "MIT",
+      "keywords": ["case-study", "portfolio", "documentation", "marketing"],
+      "category": "productivity",
+      "tags": ["case-study", "portfolio", "documentation", "developer-tools", "marketing"]
+    }
+  ]
+}

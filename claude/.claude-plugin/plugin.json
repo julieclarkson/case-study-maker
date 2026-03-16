@@ -1,0 +1,37 @@
+{
+  "name": "case-study-maker",
+  "displayName": "Case Study Maker",
+  "description": "Track your build process, capture reflection questions at the right moments, and generate portfolio and marketing case studies from your development journey. No API keys, no cloud — runs entirely within Claude Desktop Cowork.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Julie Clarkson",
+    "email": "julie@superfly.dev"
+  },
+  "homepage": "https://casestudymaker.dev",
+  "repository": "https://github.com/julieclarkson/case-study-maker",
+  "license": "MIT",
+  "logo": "assets/logo.svg",
+  "keywords": [
+    "case-study",
+    "portfolio",
+    "documentation",
+    "developer-tools",
+    "marketing",
+    "git",
+    "reflection",
+    "process-documentation"
+  ],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/check-commit.js"
+          }
+        ]
+      }
+    ]
+  }
+}

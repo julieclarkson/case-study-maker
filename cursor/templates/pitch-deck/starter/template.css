@@ -1,0 +1,38 @@
+/* Pitch deck starter — minimal one-pager */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  color: #111;
+}
+.pitch-deck h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+.pitch-deck .subtitle {
+  color: #555;
+  margin-bottom: 48px;
+}
+.pitch-deck section {
+  margin-bottom: 32px;
+}
+.pitch-deck h2 {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #666;
+  margin-bottom: 8px;
+}
+.pitch-deck .cta a {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 12px 24px;
+  background: #7c3aed;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+}
