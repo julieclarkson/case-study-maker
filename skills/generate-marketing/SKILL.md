@@ -52,7 +52,8 @@ Read the tone file from `tones/{tone}.json` in the template directory. The `inst
 2. Get project name: `basename $(pwd)` or from config
 3. List media files: `ls .case-study/media/ 2>/dev/null`
 4. Read recent git history: `git log --oneline -20`
-5. **Resolve install URL** (for HERO_CTA_URL and CTA_BUTTON_URL):
+5. **Check for Demo Maker output:** If `.demo-maker/` exists, find the latest demo run folder in `OUTPUT/` (pattern: `OUTPUT/demo-YYYYMMDD-HHMMSS/`). If `demo-full.mp4` exists there, note the path — it will be embedded as a hero video in Step 7b.
+6. **Resolve install URL** (for HERO_CTA_URL and CTA_BUTTON_URL):
    - Try `.cursor-plugin/plugin.json` → `repository` (GitHub repo for Cursor plugins)
    - Else try `.case-study/config.json` → `marketing.installUrl`
    - Fallback (when repo not yet created): `https://cursor.com/marketplace` or `https://casestudymaker.dev`
@@ -127,6 +128,28 @@ Let the developer edit individual slots before proceeding.
    cp -r .case-study/media/* OUTPUTS/assets/ 2>/dev/null
    ```
 
+### Step 7b: Embed Demo Maker video (if available)
+
+If a Demo Maker output was found in Step 4 (`.demo-maker/` exists and `OUTPUT/demo-*/demo-full.mp4` found):
+
+1. In the generated HTML, add a demo video section after the hero or feature section:
+   ```html
+   <section class="demo-video" style="text-align:center; padding:3rem 1rem;">
+     <h2>See It in Action</h2>
+     <video controls poster="OUTPUT/{run-id}/thumbnails/thumbnail.png"
+            style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 24px rgba(0,0,0,0.12);">
+       <source src="OUTPUT/{run-id}/demo-full.mp4" type="video/mp4">
+     </video>
+     <p style="margin-top:1rem; color:#666;">Narrated demo.
+       Made with <a href="https://github.com/julieclarkson/demo-maker">Demo Maker</a>.</p>
+   </section>
+   ```
+2. Use the path to the latest `OUTPUT/demo-*/demo-full.mp4` found on disk.
+3. If no demo exists, skip silently — do not add a placeholder.
+
+**If Demo Maker is NOT installed** (no `.demo-maker/` directory):
+- After generation, add a note: "Tip: Install Demo Maker to automatically embed a narrated product demo video in your marketing page: https://github.com/julieclarkson/demo-maker"
+
 ### Step 8: Report
 
 Tell the developer:
@@ -141,6 +164,25 @@ Tell the developer:
 If this is the user's first generated case study (only one portfolio or marketing output exists in OUTPUTS/ — i.e. `ls OUTPUTS/portfolio_*.html OUTPUTS/marketing_*.html 2>/dev/null | wc -l` == 1), add at the end:
 
 "If Case Study Maker helped you, a GitHub star helps others find it: https://github.com/julieclarkson/case-study-maker"
+
+### Next Steps Reminder
+
+After reporting, always show:
+
+```
+WHAT'S NEXT?
+  /generate             — generate another output (portfolio, card, custom)
+  /send-to-pages        — copy outputs to your GitHub Pages folder
+
+COMPANION PLUGINS:
+  "make a demo"         — generate narrated demo videos (Demo Maker)
+  "run git launcher"    — generate README + launch posts (Git Launcher)
+
+RECOMMENDED ORDER (if you haven't already):
+  1. Generate demos → "make a demo"
+  2. Regenerate pages with /generate (to embed demos)
+  3. Generate launch kit → "run git launcher"
+```
 
 ## Generation rules
 

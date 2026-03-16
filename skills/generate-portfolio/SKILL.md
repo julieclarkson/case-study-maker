@@ -41,6 +41,8 @@ ls OUTPUTS/assets/ 2>/dev/null
 
 Map `.case-study/media/` files to `assets/filename` in screenshots. Copy media to OUTPUTS/assets when generating.
 
+6. **Check for Demo Maker output:** If `.demo-maker/` exists, find the latest demo run folder in `OUTPUT/` (pattern: `OUTPUT/demo-YYYYMMDD-HHMMSS/`). If `demo-full.mp4` exists, note the path — it will be embedded in the portfolio (Step 5b).
+
 ### Step 2: Assess completeness
 
 Check the events for coverage against the recruiter rubric. Report gaps:
@@ -179,6 +181,28 @@ The build script uses snippets for consistent structure and outputs layered CSS 
 Optionally generate **`OUTPUTS/data_[project].json`** for programmatic access:
 - Project metadata, commits, reflections by promptId, screenshots, timeline
 
+### Step 5b: Embed Demo Maker video (if available)
+
+If Demo Maker output was found in Step 1.6:
+
+1. Add a "Demo" section to the portfolio page (after Architecture or before Iteration):
+   ```html
+   <section id="demo" class="section">
+     <div class="container">
+       <h2>Product Demo</h2>
+       <video controls poster="OUTPUT/{run-id}/thumbnails/thumbnail.png"
+              style="width:100%; max-width:800px; border-radius:8px;">
+         <source src="OUTPUT/{run-id}/demo-full.mp4" type="video/mp4">
+       </video>
+       <p>Narrated walkthrough. Made with <a href="https://github.com/julieclarkson/demo-maker">Demo Maker</a>.</p>
+     </div>
+   </section>
+   ```
+2. Add "Demo" to the sticky nav section links.
+3. If no demo exists, skip silently.
+
+**If Demo Maker is NOT installed**: After generation, note: "Tip: Install Demo Maker to embed a narrated demo in your portfolio: https://github.com/julieclarkson/demo-maker"
+
 ### Step 6: Copy media assets (create new only)
 
 When creating a *new* portfolio, copy from `.case-study/media/` to OUTPUTS:
@@ -229,6 +253,25 @@ Tell the developer:
 If this is the user's first generated case study (only one portfolio or marketing output exists in OUTPUTS/ — i.e. `ls OUTPUTS/portfolio_*.html OUTPUTS/marketing_*.html 2>/dev/null | wc -l` == 1), add at the end:
 
 "If Case Study Maker helped you, a GitHub star helps others find it: https://github.com/julieclarkson/case-study-maker"
+
+### Next Steps Reminder
+
+After reporting, always show:
+
+```
+WHAT'S NEXT?
+  /generate             — generate another output (marketing, card, custom)
+  /send-to-pages        — copy outputs to your GitHub Pages folder
+
+COMPANION PLUGINS:
+  "make a demo"         — generate narrated demo videos (Demo Maker)
+  "run git launcher"    — generate README + launch posts (Git Launcher)
+
+RECOMMENDED ORDER (if you haven't already):
+  1. Generate demos → "make a demo"
+  2. Regenerate pages with /generate (to embed demos)
+  3. Generate launch kit → "run git launcher"
+```
 
 ## Generation rules
 
