@@ -41,7 +41,10 @@ ls OUTPUTS/assets/ 2>/dev/null
 
 Map `.case-study/media/` files to `assets/filename` in screenshots. Copy media to OUTPUTS/assets when generating.
 
-6. **Check for Demo Maker output:** If `.demo-maker/` exists, find the latest demo run folder in `OUTPUT/` (pattern: `OUTPUT/demo-YYYYMMDD-HHMMSS/`). If `demo-full.mp4` exists, note the path — it will be embedded in the portfolio (Step 5b).
+6. **Check for Demo Maker output:** If `.demo-maker/` exists, find the latest demo run folder in `OUTPUT/` (pattern: `OUTPUT/demo-YYYYMMDD-HHMMSS/`). Check in this order:
+   - If `video-urls.json` (or `youtube-urls.json`) exists in that folder, read `videos["demo-full"].embedUrl` or `videos["demo-full"].url` — use for embedding in deployed pages.
+   - Else if `demo-full.mp4` exists, note the local path as fallback.
+   - The chosen URL/path will be used in Step 5b.
 
 ### Step 2: Assess completeness
 
@@ -185,7 +188,22 @@ Optionally generate **`OUTPUTS/data_[project].json`** for programmatic access:
 
 If Demo Maker output was found in Step 1.6:
 
-1. Add a "Demo" section to the portfolio page (after Architecture or before Iteration):
+**Option A — YouTube URL available** (preferred for deployed pages):
+If `video-urls.json` (or `youtube-urls.json`) was found with a `demo-full` entry, embed the video. For YouTube URLs, use an iframe. For GitHub Release URLs, use a direct link with a thumbnail:
+   ```html
+   <section id="demo" class="section">
+     <div class="container">
+       <h2>Product Demo</h2>
+       <div style="max-width:800px; margin:0 auto; border-radius:12px; overflow:hidden;">
+         <iframe src="{embedUrl}" frameborder="0" allowfullscreen
+           style="width:100%; aspect-ratio:16/9; display:block;"></iframe>
+       </div>
+       <p>Narrated walkthrough. Made with <a href="https://github.com/julieclarkson/demo-maker">Demo Maker</a>.</p>
+     </div>
+   </section>
+   ```
+
+**Option B — Local video fallback**:
    ```html
    <section id="demo" class="section">
      <div class="container">
@@ -198,8 +216,9 @@ If Demo Maker output was found in Step 1.6:
      </div>
    </section>
    ```
-2. Add "Demo" to the sticky nav section links.
-3. If no demo exists, skip silently.
+
+Add "Demo" to the sticky nav section links.
+If no demo exists at all, skip silently.
 
 **If Demo Maker is NOT installed**: After generation, note: "Tip: Install Demo Maker to embed a narrated demo in your portfolio: https://github.com/julieclarkson/demo-maker"
 

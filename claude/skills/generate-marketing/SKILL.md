@@ -49,7 +49,10 @@ Read the tone file from `tones/{tone}.json` in the template directory. The `inst
 2. Get project name: `basename $(pwd)` or from config
 3. List media files: `ls .case-study/media/ 2>/dev/null`
 4. Read recent git history: `git log --oneline -20`
-5. **Check for Demo Maker output:** If `.demo-maker/` exists, find the latest demo run folder in `OUTPUT/` (pattern: `OUTPUT/demo-YYYYMMDD-HHMMSS/`). If `demo-full.mp4` exists there, note the path — it will be embedded as a hero video in Step 7b.
+5. **Check for Demo Maker output:** If `.demo-maker/` exists, find the latest demo run folder in `OUTPUT/` (pattern: `OUTPUT/demo-YYYYMMDD-HHMMSS/`). Check in this order:
+   - If `video-urls.json` (or `youtube-urls.json`) exists in that folder, read `videos["demo-full"].embedUrl` or `videos["demo-full"].url` — use for embedding in deployed pages.
+   - Else if `demo-full.mp4` exists, note the local path as fallback.
+   - The chosen URL/path will be used in Step 7b.
 6. **Resolve install URL** (for HERO_CTA_URL and CTA_BUTTON_URL):
    - Try `.cursor-plugin/plugin.json` → `repository` (GitHub repo for Cursor plugins)
    - Else try `.case-study/config.json` → `marketing.installUrl`
@@ -107,9 +110,24 @@ Project name: `basename $(pwd)` → lowercase, hyphens removed (e.g., `casestudy
 
 ### Step 7b: Embed Demo Maker video (if available)
 
-If a Demo Maker output was found in Step 4 (`.demo-maker/` exists and `OUTPUT/demo-*/demo-full.mp4` found):
+If a Demo Maker output was found in Step 4:
 
-1. In the generated HTML, add a demo video section after the hero or feature section:
+**Option A — YouTube URL available** (preferred for deployed pages):
+If `video-urls.json` (or `youtube-urls.json`) was found with a `demo-full` entry, embed the video. For YouTube URLs, use an iframe. For GitHub Release URLs, use a direct link with a thumbnail:
+   ```html
+   <section class="demo-video" style="text-align:center; padding:3rem 1rem;">
+     <h2>See It in Action</h2>
+     <div style="max-width:800px; margin:0 auto; border-radius:12px; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.12);">
+       <iframe src="{embedUrl}" frameborder="0" allowfullscreen
+         style="width:100%; aspect-ratio:16/9; display:block;"></iframe>
+     </div>
+     <p style="margin-top:1rem; color:#666;">Narrated demo.
+       Made with <a href="https://github.com/julieclarkson/demo-maker">Demo Maker</a>.</p>
+   </section>
+   ```
+
+**Option B — Local video fallback**:
+If no YouTube URL exists but `demo-full.mp4` was found locally:
    ```html
    <section class="demo-video" style="text-align:center; padding:3rem 1rem;">
      <h2>See It in Action</h2>
@@ -121,8 +139,8 @@ If a Demo Maker output was found in Step 4 (`.demo-maker/` exists and `OUTPUT/de
        Made with <a href="https://github.com/julieclarkson/demo-maker">Demo Maker</a>.</p>
    </section>
    ```
-2. Use the path to the latest `OUTPUT/demo-*/demo-full.mp4` found on disk.
-3. If no demo exists, skip silently — do not add a placeholder.
+
+If no demo exists at all, skip silently — do not add a placeholder.
 
 **If Demo Maker is NOT installed**: After generation, note: "Tip: Install Demo Maker to embed a narrated demo video in your marketing page: https://github.com/julieclarkson/demo-maker"
 
