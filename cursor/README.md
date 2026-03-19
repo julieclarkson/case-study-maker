@@ -14,7 +14,7 @@ Install from the [Cursor Marketplace](https://cursor.com/marketplace) by searchi
 
 Or install directly from the repository:
 
-1. Open Cursor Settings (Cmd+Shift+J)
+1. Open Cursor Settings (`Cmd+Shift+J` on macOS, `Ctrl+Shift+J` on Windows/Linux)
 2. Go to **Features** > **Plugins**
 3. Add `https://github.com/julieclarkson/case-study-maker`
 
@@ -22,41 +22,49 @@ Or install directly from the repository:
 
 ## Requirements
 
-**Node.js** — Used by session-end and post-commit hooks for smart reminders (uncaptured commits, suggested reflection questions). If Node isn't installed, all other features work; you just won't get those automated prompts.
-
-- **Check:** `node --version` (if you see a version like v20.x, you're set)
-- **Install:** [nodejs.org](https://nodejs.org) or `brew install node` (macOS)
+- **Cursor IDE** — [cursor.com](https://cursor.com)
+- **Node.js 18+** (optional) — Used by post-commit hooks for smart reminders. Without it, all core features still work; you just won't get automated commit-based prompts.
+  - **Check:** `node --version` (v18.x or higher)
+  - **Install:** [nodejs.org](https://nodejs.org) or `brew install node` (macOS)
 
 ---
 
-## Quick start
+## Quick Start
 
-**Activation (choose one):**
+### Option A: Via Cursor plugin (recommended)
 
-### Option A: Via the Cursor plugin (recommended)
-1. Open any project in Cursor (with the plugin enabled)
+1. Open any project in Cursor with the plugin enabled
 2. Type `/case-study` in the chat to see all available commands
-3. Use `/activate-case-study-maker` to start tracking
+3. Run `/activate-case-study-maker` to start tracking
 
-### Option B: Via csm-init (when installed from GitHub)
-If you cloned or downloaded the repo and added it as a plugin, you can also activate from the terminal:
+### Option B: Via csm-init (GitHub install)
+
+If you cloned the repo and added it as a plugin:
 
 ```bash
 cd /path/to/your-project
 /path/to/case-study-maker/csm-init
 ```
 
-Replace `/path/to/case-study-maker` with the actual path where you cloned the repo (e.g. `~/case-study-maker` or `~/.cursor/plugins/case-study-maker`). The script copies the rule and commands into your project so the AI partner and slash commands work in chat.
+Replace `/path/to/case-study-maker` with the actual path where you cloned the repo (e.g. `~/case-study-maker`).
 
-Once activated, a `.case-study/` directory is created in your project root. The plugin will notice significant development moments and suggest capturing reflections naturally in conversation.
+**What csm-init does:**
+
+1. Creates `.case-study/` directory with `events.json`, `media/`, and starter templates
+2. Copies the always-on rule to `.cursor/rules/`
+3. Copies all slash commands to `.cursor/commands/`
+4. Installs a git post-commit hook for background capture (if in a git repo)
+5. Adds `.case-study/` to `.gitignore`
+
+Once activated, the plugin will notice significant development moments and suggest capturing reflections naturally in conversation.
 
 ---
 
-## What it does
+## What It Does
 
 ### Tracks your build process
 
-An always-on rule watches your development flow and recognizes when you're making decisions worth documenting -- architecture tradeoffs, security considerations, constraint handling, risk mitigation, and iteration.
+An always-on rule watches your development flow and recognizes when you're making decisions worth documenting — architecture tradeoffs, security considerations, constraint handling, risk mitigation, and iteration.
 
 ### Prompts reflection questions
 
@@ -78,16 +86,16 @@ Use `/auto-capture` to let the AI draft reflection answers from your conversatio
 
 Output formats, all as self-contained HTML/CSS/JS:
 
-- **Portfolio** (`/generate-portfolio`) — For recruiters and hiring managers evaluating engineering judgment
-- **Marketing** (`/generate-marketing`) — For marketers, founders, and customers evaluating product value
-- **Portfolio card** (`/generate-portfolio-card`) — Embeddable card for your site
-- **Custom categories** (`/generate-custom`) — Any category you install: pitch-deck, linkedin, etc. Add templates to `.case-study/templates/{category}/` and generate with `/generate {category}`.
+- **Portfolio** (`/generate`) — For recruiters and hiring managers evaluating engineering judgment
+- **Marketing** (`/generate`) — For marketers, founders, and customers evaluating product value
+- **Portfolio card** (`/generate`) — Embeddable card for your site
+- **Custom categories** (`/generate`) — Any category you install: pitch-deck, linkedin, etc.
 
 ---
 
 ## Commands
 
-Type `/case-study` in the Cursor chat to see the full menu. Available commands:
+Type `/case-study` in the Cursor chat to see the full menu:
 
 | Command | What it does |
 |---------|-------------|
@@ -96,19 +104,14 @@ Type `/case-study` in the Cursor chat to see the full menu. Available commands:
 | `/auto-capture` | AI drafts reflections from your conversation |
 | `/review-timeline` | Check case study completeness and find gaps |
 | `/generate` | Generate portfolio, marketing, card, or custom category |
-| `/generate-portfolio` | Generate a portfolio case study |
-| `/generate-marketing` | Generate a marketing case study |
-| `/generate-portfolio-card` | Generate embeddable card for your portfolio |
-| `/generate-custom` | Generate any installed category (pitch-deck, linkedin, etc.) |
 | `/send-to-pages` | Copy OUTPUTS to your GitHub Pages folder |
-| `/edit-case-study` | Edit wording, flow, sections, or theme |
 | `/install-template` | Install premium/custom template packs and switch themes |
 | `/integrate-figma` | Pull design assets from Figma (requires Figma plugin) |
 | `/integrate-assets` | Import from Linear, Notion, or other plugins |
 
 ---
 
-## How data is stored
+## How Data Is Stored
 
 All data stays inside your project folder:
 
@@ -117,33 +120,45 @@ your-project/
 ├── .case-study/           # Added to .gitignore automatically
 │   ├── events.json        # Append-only event log
 │   ├── media/             # Screenshots and assets
-│   └── pending.json       # Uncaptured reflection flags (auto-generated)
+│   ├── pending.json       # Uncaptured reflection flags (auto-generated)
+│   ├── templates/         # Local copy of starter templates
+│   └── scripts/           # Build scripts for generation
 └── OUTPUTS/               # Generated case studies (commit to deploy)
-    ├── portfolio_[project].html
-    ├── portfolio_[project].css       # Layout (uses theme tokens)
-    ├── themes/default/variables.css  # Design tokens — swap for different themes
-    ├── marketing_[project].html
-    ├── portfolio-card_[project].html
-    ├── portfolio-card_[project].css   # Import to override your page styles
-    └── assets/            # Screenshots
+    ├── portfolio-starter-default-*.html
+    ├── marketing-starter-light-*.html
+    └── ...
 ```
 
 Nothing is written outside the project folder. No home directory access, no cloud uploads, no network calls.
 
 ---
 
-## Privacy and security
+## Sandbox and Permissions
+
+Case Study Maker is designed to run entirely within the IDE sandbox. **No sandbox escape is needed for normal operation.**
+
+| Operation | Sandbox? | Notes |
+|-----------|----------|-------|
+| Activation, capture, generation | Standard sandbox | All reads/writes stay in project folder |
+| Post-commit hooks | Standard sandbox | Runs `node` locally, no network |
+| `/send-to-pages` | May need approval | Writes to a directory outside the project (your GitHub Pages repo) |
+
+**Your responsibility:** Cursor and Claude may request expanded permissions when an operation needs to write outside the project folder or access the network. Review each permission prompt carefully and approve only what you understand. You can configure scope settings in your IDE to control what the AI agent is allowed to do.
+
+---
+
+## Privacy and Security
 
 - **Project-scoped**: Only active in projects where you explicitly run `/activate-case-study-maker`
-- **No API keys**: Uses Cursor's built-in AI -- no separate keys or accounts needed
+- **No API keys**: Uses Cursor's built-in AI — no separate keys or accounts needed
 - **No network calls**: All hook scripts run locally with no network access
 - **No secrets stored**: The plugin stores no credentials, tokens, or keys
-- **Auditable**: All plugin code is plain markdown and vanilla JavaScript -- read every line
+- **Auditable**: All plugin code is plain markdown and vanilla JavaScript — read every line
 - **Content-Security-Policy**: Generated HTML includes CSP headers to prevent injection
 
 ---
 
-## Plugin components
+## Plugin Components
 
 | Component | Count | Description |
 |-----------|-------|-------------|
@@ -155,39 +170,36 @@ Nothing is written outside the project folder. No home directory access, no clou
 
 ---
 
-## Integrations
+## Companion Plugins
 
-Works with other Cursor plugins when installed:
+Case Study Maker is part of a three-plugin ecosystem:
 
-- **Figma** -- Pull design screenshots and component images
-- **Linear** -- Import issue context and project milestones
-- **Notion** -- Pull specs, meeting notes, and decision docs
+| Plugin | What it does |
+|--------|-------------|
+| **Case Study Maker** | Captures build reflections, generates case studies (you are here) |
+| [Demo Maker](https://github.com/julieclarkson/demo-maker) | Generates narrated video demos from your codebase |
+| [Git Launcher](https://github.com/julieclarkson/git-launcher) | Generates README, launch posts, and social assets |
 
-If a plugin isn't installed, the skill offers manual alternatives.
+**Recommended order:** Case Study Maker → Demo Maker → Git Launcher. Each reads the previous plugin's output.
 
 ---
 
-## Premium add-ons
+## Premium Add-ons
 
-The plugin is free and fully functional. Premium add-ons for professional output are available at [casestudymaker.dev](https://casestudymaker.dev):
+The plugin is free and fully functional. Premium add-ons at [casestudymaker.dev](https://casestudymaker.dev):
 
-- **Theme Pack** — Premium HTML/CSS templates (dark, minimal, bold, agency)
-- **PDF & Notion Export** — Generate PDF-ready and Notion-formatted case studies
-- **LinkedIn Portfolio Kit** — LinkedIn-optimized formatting, headline copy, post drafts
+- **Theme Pack** — Dark, minimal, bold, agency themes
+- **PDF & Notion Export** — PDF-ready and Notion-formatted output
+- **LinkedIn Portfolio Kit** — LinkedIn-optimized formatting and post drafts
 - **Pro Bundle** — Everything above at a discount
 
 ---
 
-## Reporting issues
+## Reporting Issues
 
 Found a bug? [Open a GitHub issue](https://github.com/julieclarkson/case-study-maker/issues).
 
-Please include:
-- Plugin version (see CHANGELOG)
-- Cursor version
-- Node version (`node --version`)
-- Steps to reproduce
-- Any error messages (or contents of `.case-study/plugin-errors.log` if the hooks failed)
+Please include: plugin version (CHANGELOG.md), Cursor version, Node version, steps to reproduce, and any error messages.
 
 ---
 
