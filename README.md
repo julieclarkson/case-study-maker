@@ -1,24 +1,33 @@
 # Case Study Maker
 
-A Cursor/Claude plugin that tracks your build process, prompts reflection questions at the right moments, and generates portfolio and marketing case studies from your development journey.
+**Capture your build decisions in real time. Generate portfolio and marketing case studies from your development journey.**
 
-**No API keys. No cloud. No cost.** Runs entirely on your IDE's built-in AI within your project folder.
+An always-on AI partner that watches your coding sessions and prompts reflection questions when you're making architecture tradeoffs, hardening security, or navigating constraints. When you ship, generate polished case study pages from the real decisions you captured — not from memory weeks later. Everything runs locally in your project folder.
+
+Free Cursor & Claude plugin. No API keys, no cloud, no accounts.
 
 [casestudymaker.dev](https://casestudymaker.dev) — Premium themes, PDF export, LinkedIn kit, and more.
 
 ## Install
 
+> **Important:** Clone this repo _inside_ the project you want to document.
+
 ### Cursor
 ```bash
+cd ~/my-awesome-app
 git clone https://github.com/julieclarkson/case-study-maker.git .case-study-maker
+mkdir -p .cursor/rules
+cp .case-study-maker/cursor/.cursor/rules/case-study-partner.mdc .cursor/rules/
 ```
-Then copy `cursor/` contents into your project, or add the repo as a plugin in Cursor Settings > Features > Plugins.
+Then say **"activate case study maker"** in Cursor.
 
 ### Claude Desktop (Cowork)
 ```bash
+cd ~/my-awesome-app
 git clone https://github.com/julieclarkson/case-study-maker.git .case-study-maker
+cp -r .case-study-maker/claude/skills .claude/skills
 ```
-Then copy `claude/` contents into your project.
+Then use `/activate-case-study-maker` in Claude.
 
 ### Bundle (all three plugins)
 - **Cursor**: [launchpad-cursor](https://github.com/julieclarkson/launchpad-cursor)
