@@ -49,10 +49,7 @@ Read the tone file from `tones/{tone}.json` in the template directory. The `inst
 2. Get project name: `basename $(pwd)` or from config
 3. List media files: `ls .case-study/media/ 2>/dev/null`
 4. Read recent git history: `git log --oneline -20`
-5. **Check for Demo Maker output:** If `.demo-maker/` exists, find the latest demo run folder in `OUTPUT/` (pattern: `OUTPUT/demo-YYYYMMDD-HHMMSS/`). Check in this order:
-   - If `video-urls.json` (or `youtube-urls.json`) exists in that folder, read `videos["demo-full"].embedUrl` or `videos["demo-full"].url` — use for embedding in deployed pages.
-   - Else if `demo-full.mp4` exists, note the local path as fallback.
-   - The chosen URL/path will be used in Step 7b.
+5. **Check for Demo Maker output:** If `.demo-maker/` exists, find the latest demo run folder in `OUTPUT/` (pattern: `OUTPUT/demo-YYYYMMDD-HHMMSS/`). If `demo-full.mp4` exists in that folder, it will be copied into the output directory and embedded with a relative path in Step 7b.
 6. **Resolve install URL** (for HERO_CTA_URL and CTA_BUTTON_URL):
    - Try `.cursor-plugin/plugin.json` → `repository` (GitHub repo for Cursor plugins)
    - Else try `.case-study/config.json` → `marketing.installUrl`
@@ -110,35 +107,29 @@ Project name: `basename $(pwd)` → lowercase, hyphens removed (e.g., `casestudy
 
 ### Step 7b: Embed Demo Maker video (if available)
 
-If a Demo Maker output was found in Step 4:
+If a Demo Maker `demo-full.mp4` was found in Step 5:
 
-**Option A — YouTube URL available** (preferred for deployed pages):
-If `video-urls.json` (or `youtube-urls.json`) was found with a `demo-full` entry, embed the video. For YouTube URLs, use an iframe. For GitHub Release URLs, use a direct link with a thumbnail:
+**Step 1 — Copy the video into the output directory:**
+```bash
+mkdir -p OUTPUTS/videos
+cp OUTPUT/{run-id}/demo-full.mp4 OUTPUTS/videos/demo-full.mp4
+```
+
+**Step 2 — Embed with a relative path** (works when deployed to any host):
    ```html
    <section class="demo-video" style="text-align:center; padding:3rem 1rem;">
      <h2>See It in Action</h2>
-     <div style="max-width:800px; margin:0 auto; border-radius:12px; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.12);">
-       <iframe src="{embedUrl}" frameborder="0" allowfullscreen
-         style="width:100%; aspect-ratio:16/9; display:block;"></iframe>
-     </div>
-     <p style="margin-top:1rem; color:#666;">Narrated demo.
-       Made with <a href="https://github.com/julieclarkson/demo-maker">Demo Maker</a>.</p>
-   </section>
-   ```
-
-**Option B — Local video fallback**:
-If no YouTube URL exists but `demo-full.mp4` was found locally:
-   ```html
-   <section class="demo-video" style="text-align:center; padding:3rem 1rem;">
-     <h2>See It in Action</h2>
-     <video controls poster="OUTPUT/{run-id}/thumbnails/thumbnail.png"
-            style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 24px rgba(0,0,0,0.12);">
-       <source src="OUTPUT/{run-id}/demo-full.mp4" type="video/mp4">
+     <video controls playsinline preload="metadata"
+            style="width:100%; max-width:800px; border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.12);">
+       <source src="videos/demo-full.mp4" type="video/mp4">
+       Your browser does not support video playback.
      </video>
      <p style="margin-top:1rem; color:#666;">Narrated demo.
        Made with <a href="https://github.com/julieclarkson/demo-maker">Demo Maker</a>.</p>
    </section>
    ```
+
+The relative path `videos/demo-full.mp4` works on GitHub Pages, any static host, or when opened locally. No external URL dependencies, no CSP changes needed.
 
 If no demo exists at all, skip silently — do not add a placeholder.
 

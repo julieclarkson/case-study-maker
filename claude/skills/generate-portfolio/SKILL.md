@@ -30,10 +30,7 @@ git remote get-url origin 2>/dev/null || echo "no remote"
 ls .case-study/media/ 2>/dev/null
 ```
 
-5. **Check for Demo Maker output:** If `.demo-maker/` exists, find the latest demo run folder in `OUTPUT/` (pattern: `OUTPUT/demo-YYYYMMDD-HHMMSS/`). Check in this order:
-   - If `video-urls.json` (or `youtube-urls.json`) exists in that folder, read `videos["demo-full"].embedUrl` or `videos["demo-full"].url` — use for embedding in deployed pages.
-   - Else if `demo-full.mp4` exists, note the local path as fallback.
-   - The chosen URL/path will be used in Step 5b.
+5. **Check for Demo Maker output:** If `.demo-maker/` exists, find the latest demo run folder in `OUTPUT/` (pattern: `OUTPUT/demo-YYYYMMDD-HHMMSS/`). If `demo-full.mp4` exists in that folder, it will be copied into the output directory and embedded with a relative path in Step 5b.
 
 ### Step 2: Assess completeness
 
@@ -111,36 +108,30 @@ Optionally generate **`OUTPUTS/data_[project].json`** for programmatic access:
 
 ### Step 5b: Embed Demo Maker video (if available)
 
-If Demo Maker output was found in Step 1.5:
+If Demo Maker `demo-full.mp4` was found in Step 1.5:
 
-**Option A — YouTube URL available** (preferred for deployed pages):
-If `video-urls.json` (or `youtube-urls.json`) was found with a `demo-full` entry, embed the video. For YouTube URLs, use an iframe. For GitHub Release URLs, use a direct link with a thumbnail:
+**Step 1 — Copy the video into the output directory:**
+```bash
+mkdir -p OUTPUTS/videos
+cp OUTPUT/{run-id}/demo-full.mp4 OUTPUTS/videos/demo-full.mp4
+```
+
+**Step 2 — Embed with a relative path:**
    ```html
    <section id="demo" class="section">
      <div class="container">
        <h2>Product Demo</h2>
-       <div style="max-width:800px; margin:0 auto; border-radius:12px; overflow:hidden;">
-         <iframe src="{embedUrl}" frameborder="0" allowfullscreen
-           style="width:100%; aspect-ratio:16/9; display:block;"></iframe>
-       </div>
-       <p>Narrated walkthrough. Made with <a href="https://github.com/julieclarkson/demo-maker">Demo Maker</a>.</p>
-     </div>
-   </section>
-   ```
-
-**Option B — Local video fallback**:
-   ```html
-   <section id="demo" class="section">
-     <div class="container">
-       <h2>Product Demo</h2>
-       <video controls poster="OUTPUT/{run-id}/thumbnails/thumbnail.png"
-              style="width:100%; max-width:800px; border-radius:8px;">
-         <source src="OUTPUT/{run-id}/demo-full.mp4" type="video/mp4">
+       <video controls playsinline preload="metadata"
+              style="width:100%; max-width:800px; border-radius:12px;">
+         <source src="videos/demo-full.mp4" type="video/mp4">
+         Your browser does not support video playback.
        </video>
        <p>Narrated walkthrough. Made with <a href="https://github.com/julieclarkson/demo-maker">Demo Maker</a>.</p>
      </div>
    </section>
    ```
+
+The relative path `videos/demo-full.mp4` works on GitHub Pages, any static host, or locally.
 
 Add "Demo" to the sticky nav section links.
 If no demo exists at all, skip silently.
