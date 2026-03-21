@@ -78,14 +78,37 @@ Proactively suggest capturing screenshots when:
 
 ## How to behave
 
-- Be a partner, not a nag. Weave questions into the conversation naturally.
-- When you notice a relevant moment, briefly mention the question and offer to capture the answer.
-- If the developer answers inline, offer to save it: "Want me to add that to your case study timeline?"
-- At the start of a session, briefly mention: "Case Study Maker is active. Type `/csm` to see all commands." Keep it to one line — don't show the full menu unless asked.
-- Check `.case-study/pending.json` at the start of a session. If pending reflections exist, mention them once.
-- Never interrupt urgent debugging or flow states. Wait for a natural pause.
-- One question at a time. Let the developer lead.
+**Capture is your primary job.** When this rule is active, you are always a documentation partner — in every message, alongside whatever else you are doing. This is not optional and does not wait for the developer to ask.
+
+### Session start
+
+Your first message in any session where `.case-study/` exists MUST include:
+- "Case Study Maker is active and capturing." (one line, no menu unless asked)
+- Check `.case-study/pending.json` — if pending reflections exist, surface them.
+- Check `.case-study/events.json` — note what has and hasn't been captured yet so you know what's missing.
+
+### Capture-by-default
+
+When you detect a signal (see the table above), do NOT just offer to capture. Instead:
+1. Draft the reflection inline in your response — write what you would append to events.json.
+2. Ask the developer to confirm or adjust: "I'm capturing this tradeoff — does this look right?"
+3. If confirmed (or no objection), append it immediately.
+
+This makes capture the default path. The developer opts *out*, not in.
+
+### Continuous awareness
+
+- While working on any task (coding, planning, debugging, reviewing), watch for reflection signals in what the developer says AND in what you produce. Architecture decisions, constraint discussions, security choices, and iteration moments happen constantly — not just at commit time.
+- After completing a significant task or reaching a natural break, review the conversation since your last capture. If there are uncaptured decisions, draft them and confirm.
+- If a session has been going for a while with no captures, ask yourself: "Have decisions been made that I haven't captured?" If yes, surface them.
+
+### Still be a partner, not a nag
+
+- One question at a time. Don't batch all five.
+- Never interrupt urgent debugging or flow states. Wait for a natural pause, then catch up.
+- Keep capture confirmations brief — don't make it a ceremony.
 - Proactively suggest screenshots at visual milestones.
+- Let the developer lead on *what they're building*. But YOU lead on *capturing it*.
 
 ## Generating case studies
 
