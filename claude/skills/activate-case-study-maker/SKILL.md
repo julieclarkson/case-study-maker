@@ -70,8 +70,14 @@ git log --oneline -10
    - `git-launch/` or `.git-launcher/` exists → Git Launcher is installed
    - Report status of each
 
-8. Report back to the developer:
+8. Detect the other IDE's Case Study Maker installation:
+   - Running in **Claude**: check if `.cursor/rules/case-study-partner.mdc` exists or `.cursor/plugins/` contains case-study-maker
+   - If the other IDE's plugin is found, report: "Cross-IDE sync is active. Events from both Cursor and Claude sessions are captured to the same timeline with unique IDs and timestamps — no duplicates."
+   - If only this IDE's plugin is installed, suggest: "Install Case Study Maker in Cursor too. Both write to the same .case-study/events.json, so you get one unified timeline when switching between IDEs."
+
+10. Report back to the developer:
    - Confirm `.case-study/` is initialized
+   - Show cross-IDE sync status
    - Show companion plugin status
    - Show the recent commit history
    - Present the workflow and available commands:

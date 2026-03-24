@@ -37,9 +37,10 @@ When a reflection is captured, read `.case-study/events.json`, append to the `ev
 
 ```json
 {
-  "id": "<8-random-hex-chars>",
+  "id": "<16-random-hex-chars>",
   "timestamp": "<current-ISO-8601>",
   "type": "reflection",
+  "source": "claude",
   "payload": {
     "promptId": "<one of: constraints, tradeoffs, risks, security, iteration>",
     "question": "<the full question text>",
@@ -53,15 +54,18 @@ When a reflection is captured, read `.case-study/events.json`, append to the `ev
 
 Always show the developer what you're about to write before writing it.
 
+**Before appending**, check for duplicates: if a reflection with the same `promptId` already exists for the same `relatedCommit`, skip it — it may have been captured in the Cursor session.
+
 ## How to capture screenshots
 
 When the developer mentions screenshots, UI changes, or visual milestones, offer to capture them. Save images to `.case-study/media/` and append to events:
 
 ```json
 {
-  "id": "<8-random-hex-chars>",
+  "id": "<16-random-hex-chars>",
   "timestamp": "<current-ISO-8601>",
   "type": "screenshot",
+  "source": "claude",
   "payload": {
     "filename": "<filename-in-media-dir>",
     "caption": "<description>",
@@ -82,7 +86,8 @@ Proactively suggest capturing screenshots when:
 - When you notice a relevant moment, briefly mention the question and offer to capture the answer.
 - If the developer answers inline, offer to save it: "Want me to add that to your case study timeline?"
 - At the start of a session, briefly mention: "Case Study Maker is active. Type `/case-study-maker:csm` to see all commands." Keep it to one line — don't show the full menu unless asked.
-- Check `.case-study/pending.json` at the start of a session. If pending reflections exist, mention them once.
+- Check `.case-study/pending.json` at the start of a session. If pending reflections exist, mention them once. The `pending.json` may include a `sourceBreakdown` showing how many events came from each IDE.
+- At session start, if events from Cursor exist in `events.json`, mention: "I see reflections from your Cursor sessions — they're included in the timeline."
 - Never interrupt urgent debugging or flow states. Wait for a natural pause.
 - One question at a time. Let the developer lead.
 - Proactively suggest screenshots at visual milestones.

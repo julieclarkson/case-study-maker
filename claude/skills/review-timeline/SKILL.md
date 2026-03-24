@@ -21,6 +21,7 @@ git log --oneline -20
    - **Reflections by promptId**: Which questions have been answered? How many times?
    - **Screenshots**: How many media assets exist?
    - **Manual events**: Any imported context from other tools?
+   - **Source breakdown**: Count events by `source` field (`cursor`, `claude`, `unknown`). Show this in the status report so the developer knows which IDE contributed what.
 
 4. Check coverage against both rubrics:
 
@@ -49,6 +50,10 @@ Events captured: 12
   - Reflections: 4 (constraints, tradeoffs, risks, iteration)
   - Screenshots: 2
   - Manual: 1
+
+Sources:
+  - Cursor: 8 events
+  - Claude: 4 events
 
 Coverage:
   [x] Constraints

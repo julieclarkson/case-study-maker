@@ -9,14 +9,22 @@ const { readFileSync, writeFileSync, appendFileSync, existsSync } = require('fs'
 const { join } = require('path');
 const { execFileSync } = require('child_process');
 
+const crypto = require('crypto');
+
 const cwd = process.cwd();
 const caseStudyDir = join(cwd, '.case-study');
 const eventsPath = join(caseStudyDir, 'events.json');
 const pendingPath = join(caseStudyDir, 'pending.json');
 const logPath = join(caseStudyDir, 'plugin-errors.log');
 
-function randomId() {
-  return Math.random().toString(16).slice(2, 10);
+function generateId() {
+  return crypto.randomBytes(8).toString('hex');
+}
+
+function detectSource() {
+  if (process.env.CLAUDE_PLUGIN_ROOT || process.env.CLAUDE_DESKTOP) return 'claude';
+  if (process.env.CURSOR_SESSION_ID || process.env.VSCODE_PID) return 'cursor';
+  return 'unknown';
 }
 
 function logError(hookName, err) {
@@ -105,21 +113,29 @@ function run() {
     // fresh events file
   }
 
-  const shortHash = commitHash.slice(0, 7);
-  const gitMetadataEvent = {
-    id: randomId(),
-    timestamp: new Date().toISOString(),
-    type: 'git_metadata',
-    payload: {
-      commit: commitHash,
-      shortHash,
-      message: commitMessage,
-      changedFiles,
-      suggestedQuestions,
-    },
-  };
-  eventsData.events.push(gitMetadataEvent);
-  writeFileSync(eventsPath, JSON.stringify(eventsData, null, 2), 'utf-8');
+  const alreadyCaptured = eventsData.events.some(
+    (e) => e.type === 'git_metadata' && e.payload.commit === commitHash
+  );
+  if (alreadyCaptured) {
+    if (suggestedQuestions.length === 0) process.exit(0);
+  } else {
+    const shortHash = commitHash.slice(0, 7);
+    const gitMetadataEvent = {
+      id: generateId(),
+      timestamp: new Date().toISOString(),
+      type: 'git_metadata',
+      source: detectSource(),
+      payload: {
+        commit: commitHash,
+        shortHash,
+        message: commitMessage,
+        changedFiles,
+        suggestedQuestions,
+      },
+    };
+    eventsData.events.push(gitMetadataEvent);
+    writeFileSync(eventsPath, JSON.stringify(eventsData, null, 2), 'utf-8');
+  }
 
   // 2. Write pending.json for Case Study Partner (when reflection questions suggested)
   if (suggestedQuestions.length === 0) {

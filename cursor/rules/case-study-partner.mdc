@@ -37,9 +37,10 @@ When a reflection is captured, read `.case-study/events.json`, append to the `ev
 
 ```json
 {
-  "id": "<8-random-hex-chars>",
+  "id": "<16-random-hex-chars>",
   "timestamp": "<current-ISO-8601>",
   "type": "reflection",
+  "source": "cursor",
   "payload": {
     "promptId": "<one of: constraints, tradeoffs, risks, security, iteration>",
     "question": "<the full question text>",
@@ -53,15 +54,18 @@ When a reflection is captured, read `.case-study/events.json`, append to the `ev
 
 Always show the developer what you're about to write before writing it.
 
+**Before appending**, check for duplicates: if a reflection with the same `promptId` already exists for the same `relatedCommit`, skip it -- it may have been captured in the Claude session.
+
 ## How to capture screenshots
 
 When the developer mentions screenshots, UI changes, or visual milestones, offer to capture them. Save images to `.case-study/media/` and append to events:
 
 ```json
 {
-  "id": "<8-random-hex-chars>",
+  "id": "<16-random-hex-chars>",
   "timestamp": "<current-ISO-8601>",
   "type": "screenshot",
+  "source": "cursor",
   "payload": {
     "filename": "<filename-in-media-dir>",
     "caption": "<description>",
@@ -84,8 +88,8 @@ Proactively suggest capturing screenshots when:
 
 Your first message in any session where `.case-study/` exists MUST include:
 - "Case Study Maker is active and capturing." (one line, no menu unless asked)
-- Check `.case-study/pending.json` — if pending reflections exist, surface them.
-- Check `.case-study/events.json` — note what has and hasn't been captured yet so you know what's missing.
+- Check `.case-study/pending.json` — if pending reflections exist, surface them. The `pending.json` may include a `sourceBreakdown` showing how many events came from each IDE.
+- Check `.case-study/events.json` — note what has and hasn't been captured yet so you know what's missing. If events from Claude exist, mention: "I see reflections from your Claude sessions -- they're included in the timeline."
 
 ### Capture-by-default
 

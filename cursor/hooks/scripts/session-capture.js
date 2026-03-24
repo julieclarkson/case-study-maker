@@ -1,8 +1,12 @@
 /**
  * Session-end hook: Scans for uncaptured reflections and writes a pending marker.
- * Runs when a Cursor session ends. Reads .case-study/events.json and recent git
+ * Runs when a session ends. Reads .case-study/events.json and recent git
  * history to identify gaps, then writes .case-study/pending.json so the next
  * session's always-on rule can prompt the developer.
+ *
+ * Cross-IDE aware: recognizes events from both Cursor and Claude sessions.
+ * Events are never duplicated — dedup is by commit hash for git_metadata
+ * and by promptId+commit for reflections.
  */
 
 const { readFileSync, writeFileSync, appendFileSync, existsSync } = require('fs');
@@ -14,6 +18,12 @@ const caseStudyDir = join(cwd, '.case-study');
 const eventsPath = join(caseStudyDir, 'events.json');
 const pendingPath = join(caseStudyDir, 'pending.json');
 const logPath = join(caseStudyDir, 'plugin-errors.log');
+
+function detectSource() {
+  if (process.env.CLAUDE_PLUGIN_ROOT || process.env.CLAUDE_DESKTOP) return 'claude';
+  if (process.env.CURSOR_SESSION_ID || process.env.VSCODE_PID) return 'cursor';
+  return 'unknown';
+}
 
 function logError(hookName, err) {
   if (existsSync(caseStudyDir)) {
@@ -69,11 +79,20 @@ function run() {
   const allPromptIds = ['constraints', 'tradeoffs', 'risks', 'security', 'iteration'];
   const missingPrompts = allPromptIds.filter((id) => !capturedPromptIds.has(id));
 
+  const source = detectSource();
+  const sourceBreakdown = {};
+  for (const e of events) {
+    const s = e.source || 'unknown';
+    sourceBreakdown[s] = (sourceBreakdown[s] || 0) + 1;
+  }
+
   const pending = {
     timestamp: new Date().toISOString(),
+    source,
     uncapturedCommits: uncapturedCommits.slice(0, 5),
     missingPrompts,
     totalEvents: events.length,
+    sourceBreakdown,
   };
 
   if (uncapturedCommits.length > 0 || missingPrompts.length > 0) {

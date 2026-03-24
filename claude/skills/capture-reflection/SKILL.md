@@ -44,6 +44,7 @@ Read `.case-study/events.json`, parse it, append to the `events` array, and writ
   "id": "<generate-a-uuid>",
   "timestamp": "<current-ISO-8601>",
   "type": "reflection",
+  "source": "<cursor|claude>",
   "payload": {
     "promptId": "<one of: constraints, tradeoffs, risks, security, iteration>",
     "question": "<the full question text>",
@@ -55,7 +56,16 @@ Read `.case-study/events.json`, parse it, append to the `events` array, and writ
 }
 ```
 
-Generate the UUID as 8 random hex characters (e.g., `a1b2c3d4`). Use the current ISO timestamp.
+Generate the UUID as 16 random hex characters (e.g., `a1b2c3d4e5f6a7b8`). Use the current ISO timestamp.
+
+**Source field**: Set `source` to `"cursor"` when running in Cursor/VS Code, or `"claude"` when running in Claude Desktop. This tracks which IDE captured the event.
+
+## Cross-IDE awareness
+
+Both Cursor and Claude write to the same `.case-study/events.json`. Before appending:
+1. Read the full events array — it may contain events from the other IDE.
+2. Check for duplicates: skip if an event with the same `promptId` already references the same `relatedCommit`.
+3. Events from both IDEs are interleaved chronologically by `timestamp`.
 
 ## Important
 
@@ -64,3 +74,4 @@ Generate the UUID as 8 random hex characters (e.g., `a1b2c3d4`). Use the current
 - Capture one question at a time. Don't batch all five unless the developer requests it.
 - Keep answers concise and specific. Help the developer avoid vague generalizations.
 - Only read and write files within the current project folder. Never access paths outside the project root.
+- Never duplicate an event. Check existing events by `id`, or by `promptId` + `relatedCommit` combination.
