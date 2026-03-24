@@ -7,7 +7,7 @@
  * Usage:
  *   npx playwright install chromium   # first time only
  *   node scripts/capture-output-screenshot.js [path-to-html]
- *   node scripts/capture-output-screenshot.js OUTPUTS/portfolio_casestudymaker.html
+ *   node scripts/capture-output-screenshot.js OUTPUTS_CASE_STUDY_MAKER/portfolio_casestudymaker.html
  *
  * Output: .case-study/media/portfolio-full-page.png (or derived from filename)
  */
@@ -17,7 +17,7 @@ const path = require('path');
 const fs = require('fs');
 
 const cwd = process.cwd();
-const htmlPath = process.argv[2] || path.join(cwd, 'OUTPUTS', 'portfolio_casestudymaker.html');
+const htmlPath = process.argv[2] || path.join(cwd, 'OUTPUTS_CASE_STUDY_MAKER', 'portfolio_casestudymaker.html');
 const resolvedPath = path.resolve(cwd, htmlPath);
 
 if (!fs.existsSync(resolvedPath)) {

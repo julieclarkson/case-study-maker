@@ -15,12 +15,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Marketing landing page generation from starter template
 - Portfolio card generation for embedding
 - Theme system: separate design tokens (themes/) from layout (templates/)
-- OUTPUTS folder with selective send-to-pages deployment
+- OUTPUTS_CASE_STUDY_MAKER folder with selective send-to-pages deployment
 - Home button in portfolio nav
 - `/csm` hub command and slash commands
 
 ### Changed
 
 - Pivoted from standalone web app to Cursor plugin
-- Outputs now use `OUTPUTS/` with `[type]_[project].[ext]` naming
+- Outputs now use `OUTPUTS_CASE_STUDY_MAKER/` with `[type]_[project].[ext]` naming
 - Logo updated to SVG format

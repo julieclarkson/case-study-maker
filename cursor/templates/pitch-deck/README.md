@@ -35,4 +35,4 @@ pitch-deck/
 
 1. Copy to your project: `cp -r templates/pitch-deck .case-study/templates/`
 2. Run: `/generate pitch-deck` or "generate pitch deck"
-3. Output: `OUTPUTS/pitch-deck_[project].html`
+3. Output: `OUTPUTS_CASE_STUDY_MAKER/pitch-deck_[project].html`

@@ -7,18 +7,18 @@
  *   node .case-study/scripts/generate-index-card.cjs
  *   node .case-study/scripts/generate-index-card.cjs --base-path case-studies/
  *
- * Reads portfolio_data.json and scans OUTPUTS for [project]-[type]-[timestamp].html files.
- * Writes OUTPUTS/index-card.html with the project-specific card chunk.
+ * Reads portfolio_data.json and scans OUTPUTS_CASE_STUDY_MAKER for [project]-[type]-[timestamp].html files.
+ * Writes OUTPUTS_CASE_STUDY_MAKER/index-card.html with the project-specific card chunk.
  */
 
 const { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync } = require('fs');
 const { join } = require('path');
 
 const cwd = process.cwd();
-const OUTPUTS = join(cwd, 'OUTPUTS');
+const OUTPUTS_CASE_STUDY_MAKER = join(cwd, 'OUTPUTS_CASE_STUDY_MAKER');
 const DATA_PATHS = [
-  join(cwd, '.case-study', 'OUTPUTS', 'portfolio_data.json'),
-  join(cwd, 'OUTPUTS', 'portfolio_data.json'),
+  join(cwd, '.case-study', 'OUTPUTS_CASE_STUDY_MAKER', 'portfolio_data.json'),
+  join(cwd, 'OUTPUTS_CASE_STUDY_MAKER', 'portfolio_data.json'),
 ];
 
 function loadData() {
@@ -33,8 +33,8 @@ function loadData() {
 }
 
 function discoverAssets(projectSlug) {
-  if (!existsSync(OUTPUTS)) return [];
-  const files = readdirSync(OUTPUTS);
+  if (!existsSync(OUTPUTS_CASE_STUDY_MAKER)) return [];
+  const files = readdirSync(OUTPUTS_CASE_STUDY_MAKER);
   const out = [];
   const uniqueIdRe = /-(\d{8}-\d{6})(?:\.|$)/;
   for (const f of files) {
@@ -130,7 +130,7 @@ function main() {
   const assets = discoverAssets(projectSlug);
 
   if (assets.length === 0) {
-    const files = existsSync(OUTPUTS) ? readdirSync(OUTPUTS).filter(f => f.endsWith('.html')) : [];
+    const files = existsSync(OUTPUTS_CASE_STUDY_MAKER) ? readdirSync(OUTPUTS_CASE_STUDY_MAKER).filter(f => f.endsWith('.html')) : [];
     const uniqueIdRe = /-(\d{8}-\d{6})(?:\.|$)/;
     for (const f of files) {
       const base = f.replace(/\.html$/, '');
@@ -143,8 +143,8 @@ function main() {
   }
 
   const html = renderCard(data, assets, basePath);
-  const outPath = join(OUTPUTS, 'index-card.html');
-  mkdirSync(OUTPUTS, { recursive: true });
+  const outPath = join(OUTPUTS_CASE_STUDY_MAKER, 'index-card.html');
+  mkdirSync(OUTPUTS_CASE_STUDY_MAKER, { recursive: true });
   writeFileSync(outPath, html, 'utf-8');
   console.log(`Wrote ${outPath}`);
   console.log('\nPaste this into your index.html:\n');

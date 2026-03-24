@@ -5,7 +5,7 @@
  *
  * Usage:
  *   node scripts/build-portfolio.js [project-slug]
- *   node scripts/build-portfolio.js --data OUTPUTS/portfolio_data.json
+ *   node scripts/build-portfolio.js --data OUTPUTS_CASE_STUDY_MAKER/portfolio_data.json
  *   node scripts/build-portfolio.js --refresh-from-git [project-slug]  # refresh commits + screenshots from git/events, then build
  *
  * Template resolution:
@@ -134,11 +134,11 @@ function deriveWorkflowFromArchHero(html) {
   return { nodes, edges };
 }
 
-/** Refresh data.commits from git log and data.screenshots from OUTPUTS/assets. Writes back to dataPath. */
+/** Refresh data.commits from git log and data.screenshots from OUTPUTS_CASE_STUDY_MAKER/assets. Writes back to dataPath. */
 function refreshFromGitAndEvents(data, dataPath) {
   const eventsPath = join(cwd, '.case-study', 'events.json');
-  const assetsDir = join(cwd, 'OUTPUTS', 'assets');
-  const outAssets = join(cwd, 'OUTPUTS', 'assets');
+  const assetsDir = join(cwd, 'OUTPUTS_CASE_STUDY_MAKER', 'assets');
+  const outAssets = join(cwd, 'OUTPUTS_CASE_STUDY_MAKER', 'assets');
 
   // 1. Refresh commits from git
   try {
@@ -163,7 +163,7 @@ function refreshFromGitAndEvents(data, dataPath) {
     console.warn('Could not run git log; keeping existing commits.');
   }
 
-  // 2. Refresh screenshots from OUTPUTS/assets only (source of truth). Captions from events when matched.
+  // 2. Refresh screenshots from OUTPUTS_CASE_STUDY_MAKER/assets only (source of truth). Captions from events when matched.
   const screenshots = [];
   const captionByFile = {};
   if (existsSync(eventsPath)) {
@@ -212,9 +212,9 @@ function main() {
 
   if (!dataPath) {
     const slugForPath = sanitizeIdentifier(projectSlug || 'default');
-    dataPath = join(cwd, 'OUTPUTS', `portfolio_data_${slugForPath}.json`);
+    dataPath = join(cwd, 'OUTPUTS_CASE_STUDY_MAKER', `portfolio_data_${slugForPath}.json`);
     if (!existsSync(dataPath)) {
-      dataPath = join(cwd, 'OUTPUTS', 'portfolio_data.json');
+      dataPath = join(cwd, 'OUTPUTS_CASE_STUDY_MAKER', 'portfolio_data.json');
     }
   }
   if (dataPath && !isUnderDir(resolve(cwd, dataPath), cwd)) {
@@ -339,7 +339,7 @@ function main() {
   let layoutCss = readFileSync(join(templateDir, 'template.css'), 'utf-8');
   layoutCss = layoutCss.replace(/@import\s+["'][^"']+["']\s*;\s*\n?/g, '');
 
-  const outDir = join(cwd, 'OUTPUTS');
+  const outDir = join(cwd, 'OUTPUTS_CASE_STUDY_MAKER');
   const themesOutDir = join(outDir, 'themes', theme);
   mkdirSync(themesOutDir, { recursive: true });
 
@@ -348,7 +348,7 @@ function main() {
   const varsPath = join(themesOutDir, 'variables.css');
 
   if (!isUnderDir(htmlPath, outDir) || !isUnderDir(cssPath, outDir)) {
-    console.error('Security: resolved output paths would escape OUTPUTS/ directory. Aborting.');
+    console.error('Security: resolved output paths would escape OUTPUTS_CASE_STUDY_MAKER/ directory. Aborting.');
     process.exit(1);
   }
 
