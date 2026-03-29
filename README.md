@@ -105,6 +105,8 @@ Case Study Maker runs entirely within the IDE sandbox. All data stays in your pr
 - **Manage IDE scope and permissions.** Cursor and Claude may request expanded permissions for operations like `/send-to-pages` (writes outside the project folder). Review each prompt carefully. Configure your IDE's scope settings to control what the AI agent can do.
 - **Don't commit secrets.** The plugin never stores API keys (it doesn't use any), but your reflections may reference sensitive decisions. Review `.case-study/events.json` before committing if your project involves proprietary information.
 
+Security-related changes are tracked in [SECURITY_LOG.md](SECURITY_LOG.md).
+
 ## Companion Plugins
 
 Case Study Maker is the first step in a three-plugin workflow:
@@ -117,6 +119,19 @@ Each plugin feeds into the next. Demo Maker reads your case study timeline for n
 
 **Install order:** Case Study Maker → Demo Maker → Git Launcher
 
+## Legal
+
+Published by **Jacobus Company LLC** (dba **Superfly Web Designs**), United States.
+
+- [LICENSE](LICENSE) — MIT License (copyright Jacobus Company LLC)
+- [Terms of Service](https://julieclarkson.com/terms.html) — ([repo copy](TERMS_OF_SERVICE.md))
+- [Privacy Policy](https://julieclarkson.com/privacy.html) — ([repo copy](PRIVACY_POLICY.md))
+- [Liability Waiver](https://julieclarkson.com/liability.html) — ([repo copy](LIABILITY_WAIVER.md))
+
+The Software is provided "as is." You are responsible for reviewing generated content, managing credentials, and IDE permissions. The hosted pages above are the canonical human-readable legal documents.
+
 ## License
 
-MIT
+MIT License. See [LICENSE](LICENSE).
+
+Copyright (c) 2026 Jacobus Company LLC (dba Superfly Web Designs).

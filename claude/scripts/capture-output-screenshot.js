@@ -43,7 +43,7 @@ console.log('  Output:', outPath);
 const r = spawnSync(
   'npx',
   ['-y', 'playwright', 'screenshot', '--full-page', '--viewport-size=1280,800', fileUrl, outPath],
-  { cwd, stdio: 'inherit', shell: true }
+  { cwd, stdio: 'inherit', shell: false }
 );
 
 if (r.status !== 0) {

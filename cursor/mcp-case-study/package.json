@@ -1,0 +1,28 @@
+{
+  "name": "mcp-case-study",
+  "version": "1.0.0",
+  "description": "stdio MCP server for Case Study Maker — scoped to .case-study/ only",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "mcp-case-study": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "prepack": "npm ls --omit=dev"
+  },
+  "keywords": [
+    "mcp",
+    "case-study",
+    "cursor",
+    "stdio"
+  ],
+  "author": "Jacobus Company LLC (dba Superfly Web Designs)",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.28.0",
+    "zod": "4.3.6"
+  }
+}

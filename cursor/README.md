@@ -155,6 +155,7 @@ Case Study Maker is designed to run entirely within the IDE sandbox. **No sandbo
 - **No secrets stored**: The plugin stores no credentials, tokens, or keys
 - **Auditable**: All plugin code is plain markdown and vanilla JavaScript — read every line
 - **Content-Security-Policy**: Generated HTML includes CSP headers to prevent injection
+- **Optional MCP (stdio)**: `mcp-case-study/` exposes `.case-study/` only, with pinned deps, no shell, path allowlists, and untrusted-data labeling. See `mcp-case-study/README.md`.
 
 ---
 
